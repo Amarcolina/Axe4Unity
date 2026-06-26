@@ -1,0 +1,437 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52f51a6d909ac14092c2fc53cce8caf, type: 3}
+  m_Name: LargeFont
+  m_EditorClassIdentifier: Axe::BitFont
+  Font: {fileID: 12800000, guid: cad8d2a2f83946944881fa99dbac1792, type: 3}
+  Asset: {fileID: 7239065423396753691, guid: b1bb6057a1fbb7b4aac56a7aac6a52b5, type: 3}
+  XOffset: 0
+  YOffset: 1
+  Height: 8
+  Glyphs:
+  - Char: '!'
+    Width: 6
+    Height: 8
+    Code: 33
+    Lines: 0404000404040400
+  - Char: .
+    Width: 6
+    Height: 8
+    Code: 46
+    Lines: 0606000000000000
+  - Char: ','
+    Width: 6
+    Height: 8
+    Code: 44
+    Lines: 0204060000000000
+  - Char: ''''
+    Width: 6
+    Height: 8
+    Code: 39
+    Lines: 0000000004040400
+  - Char: '?'
+    Width: 6
+    Height: 8
+    Code: 63
+    Lines: 0400040810110e00
+  - Char: ':'
+    Width: 6
+    Height: 8
+    Code: 58
+    Lines: 0006060006060000
+  - Char: +
+    Width: 6
+    Height: 8
+    Code: 43
+    Lines: 0004041f04040000
+  - Char: '-'
+    Width: 6
+    Height: 8
+    Code: 45
+    Lines: 0000000e00000000
+  - Char: /
+    Width: 6
+    Height: 8
+    Code: 47
+    Lines: 0001020408100000
+  - Char: '*'
+    Width: 6
+    Height: 8
+    Code: 42
+    Lines: 0004150e15040000
+  - Char: ^
+    Width: 6
+    Height: 8
+    Code: 94
+    Lines: 00000000110a0400
+  - Char: '%'
+    Width: 6
+    Height: 8
+    Code: 37
+    Lines: 1819020408130300
+  - Char: ' '
+    Width: 6
+    Height: 8
+    Code: 32
+    Lines: 0000000000000000
+  - Char: <
+    Width: 6
+    Height: 8
+    Code: 60
+    Lines: 0804020102040800
+  - Char: '>'
+    Width: 6
+    Height: 8
+    Code: 62
+    Lines: 0204081008040200
+  - Char: '{'
+    Width: 6
+    Height: 8
+    Code: 123
+    Lines: 1804040204041800
+  - Char: '}'
+    Width: 6
+    Height: 8
+    Code: 125
+    Lines: 0304040804040300
+  - Char: (
+    Width: 6
+    Height: 8
+    Code: 40
+    Lines: 0804020202040800
+  - Char: )
+    Width: 6
+    Height: 8
+    Code: 41
+    Lines: 0204080808040200
+  - Char: '['
+    Width: 6
+    Height: 8
+    Code: 193
+    Lines: 0c04040404040c00
+  - Char: ']'
+    Width: 6
+    Height: 8
+    Code: 93
+    Lines: 0604040404040600
+  - Char: 0
+    Width: 6
+    Height: 8
+    Code: 48
+    Lines: 0e11131519110e00
+  - Char: 1
+    Width: 6
+    Height: 8
+    Code: 49
+    Lines: 0e04040404060400
+  - Char: 2
+    Width: 6
+    Height: 8
+    Code: 50
+    Lines: 1f02040810110e00
+  - Char: 3
+    Width: 6
+    Height: 8
+    Code: 51
+    Lines: 0e11100804081f00
+  - Char: 4
+    Width: 6
+    Height: 8
+    Code: 52
+    Lines: 08081f090a0c0800
+  - Char: 5
+    Width: 6
+    Height: 8
+    Code: 53
+    Lines: 0e1110100f011f00
+  - Char: 6
+    Width: 6
+    Height: 8
+    Code: 54
+    Lines: 0e11110f01020c00
+  - Char: 7
+    Width: 6
+    Height: 8
+    Code: 55
+    Lines: 0202020408101f00
+  - Char: 8
+    Width: 6
+    Height: 8
+    Code: 56
+    Lines: 0e11110e11110e00
+  - Char: 9
+    Width: 6
+    Height: 8
+    Code: 57
+    Lines: 0608101e11110e00
+  - Char: A
+    Width: 6
+    Height: 8
+    Code: 65
+    Lines: 1111111f11110e00
+  - Char: a
+    Width: 6
+    Height: 8
+    Code: 97
+    Lines: 1e111e100e000000
+  - Char: B
+    Width: 6
+    Height: 8
+    Code: 66
+    Lines: 0f11110f11110f00
+  - Char: b
+    Width: 6
+    Height: 8
+    Code: 98
+    Lines: 0f1111130d010100
+  - Char: C
+    Width: 6
+    Height: 8
+    Code: 67
+    Lines: 0e11010101110e00
+  - Char: c
+    Width: 6
+    Height: 8
+    Code: 99
+    Lines: 0e1101010e000000
+  - Char: D
+    Width: 6
+    Height: 8
+    Code: 68
+    Lines: 0f11111111110f00
+  - Char: d
+    Width: 6
+    Height: 8
+    Code: 100
+    Lines: 1e11111916101000
+  - Char: E
+    Width: 6
+    Height: 8
+    Code: 69
+    Lines: 1f01010f01011f00
+  - Char: e
+    Width: 6
+    Height: 8
+    Code: 101
+    Lines: 0e011f110e000000
+  - Char: F
+    Width: 6
+    Height: 8
+    Code: 70
+    Lines: 0101010f01011f00
+  - Char: f
+    Width: 6
+    Height: 8
+    Code: 102
+    Lines: 0202020702120c00
+  - Char: G
+    Width: 6
+    Height: 8
+    Code: 71
+    Lines: 1e11111d01110e00
+  - Char: g
+    Width: 6
+    Height: 8
+    Code: 103
+    Lines: 0e101e11111e0000
+  - Char: H
+    Width: 6
+    Height: 8
+    Code: 72
+    Lines: 1111111f11111100
+  - Char: h
+    Width: 6
+    Height: 8
+    Code: 104
+    Lines: 111111130d010100
+  - Char: I
+    Width: 6
+    Height: 8
+    Code: 73
+    Lines: 0e04040404040e00
+  - Char: i
+    Width: 6
+    Height: 8
+    Code: 105
+    Lines: 0e04040406000400
+  - Char: J
+    Width: 6
+    Height: 8
+    Code: 74
+    Lines: 0609080808081c00
+  - Char: j
+    Width: 6
+    Height: 8
+    Code: 106
+    Lines: 060908080c000800
+  - Char: K
+    Width: 6
+    Height: 8
+    Code: 75
+    Lines: 1109050305091100
+  - Char: k
+    Width: 6
+    Height: 8
+    Code: 107
+    Lines: 120a060a12020200
+  - Char: L
+    Width: 6
+    Height: 8
+    Code: 76
+    Lines: 1f01010101010100
+  - Char: l
+    Width: 6
+    Height: 8
+    Code: 108
+    Lines: 0e04040404040600
+  - Char: M
+    Width: 6
+    Height: 8
+    Code: 77
+    Lines: 11111115151b1100
+  - Char: m
+    Width: 6
+    Height: 8
+    Code: 109
+    Lines: 111115150b000000
+  - Char: N
+    Width: 6
+    Height: 8
+    Code: 78
+    Lines: 1111191513111100
+  - Char: n
+    Width: 6
+    Height: 8
+    Code: 110
+    Lines: 111111130d000000
+  - Char: O
+    Width: 6
+    Height: 8
+    Code: 79
+    Lines: 0e11111111110e00
+  - Char: o
+    Width: 6
+    Height: 8
+    Code: 111
+    Lines: 0e1111110e000000
+  - Char: P
+    Width: 6
+    Height: 8
+    Code: 80
+    Lines: 0101010f11110f00
+  - Char: p
+    Width: 6
+    Height: 8
+    Code: 112
+    Lines: 01010f110f000000
+  - Char: Q
+    Width: 6
+    Height: 8
+    Code: 81
+    Lines: 1609151111110e00
+  - Char: q
+    Width: 6
+    Height: 8
+    Code: 113
+    Lines: 10101e1916000000
+  - Char: R
+    Width: 6
+    Height: 8
+    Code: 82
+    Lines: 1109050f11110f00
+  - Char: r
+    Width: 6
+    Height: 8
+    Code: 114
+    Lines: 010101130d000000
+  - Char: S
+    Width: 6
+    Height: 8
+    Code: 83
+    Lines: 0f10100e01011e00
+  - Char: s
+    Width: 6
+    Height: 8
+    Code: 115
+    Lines: 0f100e010e000000
+  - Char: T
+    Width: 6
+    Height: 8
+    Code: 84
+    Lines: 0404040404041f00
+  - Char: t
+    Width: 6
+    Height: 8
+    Code: 116
+    Lines: 0c12020207020200
+  - Char: U
+    Width: 6
+    Height: 8
+    Code: 85
+    Lines: 0e11111111111100
+  - Char: u
+    Width: 6
+    Height: 8
+    Code: 117
+    Lines: 1619111111000000
+  - Char: V
+    Width: 6
+    Height: 8
+    Code: 86
+    Lines: 040a0a1111111100
+  - Char: v
+    Width: 6
+    Height: 8
+    Code: 118
+    Lines: 040a111111000000
+  - Char: W
+    Width: 6
+    Height: 8
+    Code: 87
+    Lines: 0a15151511111100
+  - Char: w
+    Width: 6
+    Height: 8
+    Code: 119
+    Lines: 0a15151111000000
+  - Char: X
+    Width: 6
+    Height: 8
+    Code: 88
+    Lines: 11110a040a111100
+  - Char: x
+    Width: 6
+    Height: 8
+    Code: 120
+    Lines: 110a040a11000000
+  - Char: Y
+    Width: 6
+    Height: 8
+    Code: 89
+    Lines: 0404040a11111100
+  - Char: y
+    Width: 6
+    Height: 8
+    Code: 121
+    Lines: 0e101e1111000000
+  - Char: Z
+    Width: 6
+    Height: 8
+    Code: 90
+    Lines: 1f01020408101f00
+  - Char: z
+    Width: 6
+    Height: 8
+    Code: 122
+    Lines: 1f0204081f000000
+  PreviewChar: 
+  PreviewFont: []

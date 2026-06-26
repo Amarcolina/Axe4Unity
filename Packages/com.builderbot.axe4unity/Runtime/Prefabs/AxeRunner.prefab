@@ -1,0 +1,117 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7639334103058008323
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 101614207626153836}
+  - component: {fileID: 1518577579370267955}
+  - component: {fileID: 6044494911366066962}
+  m_Layer: 0
+  m_Name: AxeRunner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &101614207626153836
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7639334103058008323}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1518577579370267955
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7639334103058008323}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c9d4aff72e4319428440e4e47bae58b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Axe::AxeRunner
+  Program: {fileID: 0}
+  Controls: {fileID: 6044494911366066962}
+  Screen: {fileID: 0}
+  NativeRunner: {fileID: 0}
+  LargeFont: {fileID: 11400000, guid: 7f9af0096bc6b694ca16f97b356e9f81, type: 2}
+  SmallFont: {fileID: 11400000, guid: d258de6358f358b4cad68b7fa346614a, type: 2}
+  AppVars: []
+  Running: 1
+  DelayStart: 0.5
+  TargetFPS: 60
+  SimulationScale: 1
+  MaxCPUPerAppFrame: 8
+  MaxOpsPerFrame: 100000
+  GetKeySkipCount: 100
+  LockedKey: 0
+--- !u!114 &6044494911366066962
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7639334103058008323}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0770e9814fce0c248952ee02848fcdc4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Axe4Unity::Axe4Unity.AxeKeyboardControl
+  CalcKeyboard: {fileID: 0}
+  DisableUnusedButtons: 1
+  Bindings:
+  - Name: downArrow
+    Code: 1
+  - Name: s
+    Code: 1
+  - Name: leftArrow
+    Code: 2
+  - Name: a
+    Code: 2
+  - Name: rightArrow
+    Code: 3
+  - Name: d
+    Code: 3
+  - Name: upArrow
+    Code: 4
+  - Name: w
+    Code: 4
+  - Name: e
+    Code: 54
+  - Name: f
+    Code: 48
+  - Name: escape
+    Code: 15
+  - Name: numpad1
+    Code: 34
+  - Name: numpad2
+    Code: 26
+  - Name: numpad3
+    Code: 18
+  - Name: numpad4
+    Code: 35
+  - Name: numpad5
+    Code: 27
+  - Name: numpad6
+    Code: 19
+  - Name: numpad7
+    Code: 36
+  - Name: numpad8
+    Code: 28
+  - Name: numpad9
+    Code: 20

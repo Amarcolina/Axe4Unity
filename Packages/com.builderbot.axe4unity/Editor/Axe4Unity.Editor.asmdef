@@ -1,0 +1,19 @@
+{
+    "name": "Axe4Unity.Editor",
+    "rootNamespace": "Axe4Unity",
+    "references": [
+        "GUID:28fb26b3a609c8343af1c14a277b34c3",
+        "GUID:e0cd26848372d4e5c891c569017e11f1"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

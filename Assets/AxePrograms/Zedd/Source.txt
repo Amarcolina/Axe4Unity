@@ -1,0 +1,109 @@
+Commented source of the Demo program.
+
+:.AXE					//Program Header
+:DiagnosticOff				//Turn off Run Indicator
+:FnOff 					//Turn off Interupts (not neccessary)
+:Fix 5					//Enable TextToGraph drawing (not neccessary)
+:[Pic0]?Pic0				//Load background Image into Pic0
+:[FFFFFFFFFFFFFFFFFFFFFFFF]
+:copy(Pic0,L3,768			//Load Pic0 into the backbuffeer	
+:GetCalc("vM",Y1)			//Load Archived Appvar M into file pointer Y1
+:For(F,0,383				//Read each byte of M into L2, our collision buffer
+:{Y1+F}?{L2+F}				//Appvar M holds the tilemap for our simultion		
+:End
+:
+:[FE82BABABA82FE0000000000000000002070880000000000EE6C6C6CFE000000]?Str0SP	//Sprites
+:L1?GDB0OB				//Set L1 to be our Main Object Buffer for the Zedd simulation
+:L4?GDB0VR				//Set L4 to be the local variable buffer, used by Zedd and libs
+:L2?GDB0TM				//Set L2 to be our tilemap buffer
+:24?GDB0WD				//Set the width (sprites) of our tilemap to 24
+:1?GDB0CL				//Set the collision switch point to 1 (0=not solid, >0 is solid)
+:4?GDB0SP				//Set the sprite size of out tiles to 4 pixels
+:4?GDB0FR				//Set the default friction of objects to 4
+:LoadZ(0,15)				//Load a Zedd simulation with global gravity 0,15
+:
+:L1+400?GDB2OB				//Set L1+400 to be the variable space for the rope library
+:LoadR(10,7,8,5				//Load a rope with length 10, object index 7, and starting anchor 8,5
+:
+:L1+500?GDB3OB				//Set L1+500 to be the variable space for the buoyancy library
+:LoadB(44,24,2)				//Load the water line to 44 pixels, with a water density of 24 and viscosity of 2
+:
+:AddZ(12,4,7,7,8,0)			//Add an object at 12,4 with size 7,7 mass of 8, and sprite size 0
+:AddZ(32,43,60,4,8,1)			//moar objects
+:AddZ(4,30,7,7,8,0)
+:AddZ(60,30,7,7,8,0)
+:AddZ(62,5,7,7,8,0)			//MOAR object!
+:AddM(8,0,7)				//Add an object to index 7, does not affect collisions (the claw)
+:FixZ(1,1,2)				//Fix object 2 in both Axis
+:
+:0?F					//F is a counter
+:8?I					//the X position of the rope anchor			
+:10?J					//the length of the rope
+:7?N					//the object the rope is attatched to
+:
+:Repeat getKey(15)			//Repeat until we press clear
+:F+1?F					//increment counter
+:!If F^2				//Every other frame, update the rope (just so it doesnt move too fast)
+:If I?8					//move the rope to the left if pressing left
+:I-getKey(2)?I
+:End
+:If I?87				//move the rope to the right if pressing right
+:I+getKey(3)?I
+:End
+:If J?10				//decrease the length of the rope if pressing up
+:J-getKey(4)?J
+:End
+:J+getKey(1)?J				//increase the length of the rope if pressing down
+:LocR(I,5)				//Set the Location of the rope anchor to I,5
+:LenR(J)				//Set the length of the rope to J
+:End
+:
+:If getKey(54)				//If pressing second (conveyer belt control)
+:VelZ(-128,0,2)				//Set the velocity of the conveyer belt to -128.  Fixed objects can still use	
+:!If F^4				//their velocity to affect other objects
+:rref(36,44,50,1
+:rref(36,47,50,1			//draw the belt animation
+:StorePic 
+:End
+:Else
+:VelZ(0,0,2)				//If not pressing second, reset the velocity to 0
+:End
+:
+:Solve(7)				//Solve momentum on object 7
+:SimZ()					//Solve collisions on all objects
+:SimR()					//Simulate the rope forces
+:
+:If N=7					//If the rope object is the claw
+:Pt-On(X(7)-2,Y(7),Str0SP+16		//display the claw
+:End
+:Pt-On(I-3,0,Str0SP+24			//Display the rope anchor sprite
+:DispGraph				//display the screen
+:RecallPic 				//and reset the screen
+:
+:getKey?K
+:If K=48				//if pressing alpha (grabbing or releasing the claw)
+:X(N)?S					//Get the X,Y position of the rope object and put it into S,T
+:Y(N)?T
+:If N=7					//If the current rope object is the claw
+:ObjAt(S,T)?N				//get the object at the claw position
+:!If N					//If no object was returned
+:7?N					//reset the object to the claw				
+:End	
+:Else					//If the current rope object is any other object
+:7?N					//change the rope object into the claw
+:SetXY(S,T,7)				//Set the claw location to that of the object we just released
+:VelZ(0,0,7)				//Set the velocity of the claw to 0,0
+:End
+:ObjR(N)				//Set the object the rope is attatched to to N, our current object
+:End
+:End
+:
+:Return					//Return Program			
+:
+:
+:prgmZEDD				//Zedd Subprogram Include
+:prgmROPE				//Rope Subprogram Include
+:prgmMOMENTUM				//Momentum Subprogram Include
+:Lbl CLZ				//Callback function
+:prgmBUOYANT				//Buoyancy Callback Include
+:Return					

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 6c9d4aff72e4319428440e4e47bae58b
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - Program: {instanceID: 0}
+  - NativeRunner: {instanceID: 0}
+  - LargeFont: {fileID: 11400000, guid: 7f9af0096bc6b694ca16f97b356e9f81, type: 2}
+  - SmallFont: {fileID: 11400000, guid: d258de6358f358b4cad68b7fa346614a, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
