@@ -48,7 +48,7 @@ namespace Axe4Unity {
 
       //Remove comment lines
       for (int i = lines.Count - 1; i >= 0; i--) {
-        if (lines[i].Tokens.Count == 0 || lines[i].Tokens[0] == ".") {
+        if (lines[i].Tokens.Count == 0) {
           lines.RemoveAt(i);
         }
       }
@@ -63,6 +63,7 @@ namespace Axe4Unity {
       for (Pass = 0; Pass < 2; Pass++) {
         Program.Data.Clear();
         LetterVarAddress = Machine.ADDR_LETTER_VARS;
+        bool isInMultiLineComment = false;
 
         for (LineIndex = 0; LineIndex < lines.Count; LineIndex++) {
           try {
@@ -70,9 +71,19 @@ namespace Axe4Unity {
             I = 0;
             CurrentLine = new();
 
+            bool isCommentLine = isInMultiLineComment;
+            if (Tokens.Count != 0 && Tokens[0] == ".") {
+              if (Tokens.Count >= 3 && Tokens[1] == "." && Tokens[2] == ".") {
+                isInMultiLineComment = !isInMultiLineComment;
+              }
+              isCommentLine = true;
+            }
+
             var programLine = Program.Lines[LineIndex];
 
-            EmitExpression();
+            if (!isCommentLine) {
+              EmitExpression();
+            }
 
             if (CurrentLine.All(o => o.IsDataAddr)) {
               CurrentLine.Clear();
@@ -1182,6 +1193,15 @@ namespace Axe4Unity {
         //CRABCAKE
         case "AxesOn": EmitStandalone<Op.Nop>(); break;
         case "AxesOff": EmitStandalone<Op.Nop>(); break;
+
+        //MEMKIT
+        case "ZXmin": EmitStandalone<Op.MemKit.Load>(); Skip(")"); break;
+        case "ZXmax": EmitStandalone<Op.MemKit.Next>(); Skip(")"); break;
+        case "ZXres": EmitFunction<Op.MemKit.Print>(); break;
+        case "Zthetamax": EmitFunction<Op.MemKit.New>(); break;
+        case "Zthetastep": EmitFunction<Op.MemKit.Delete>(); break;
+        case "dim(": I++; Emit(ParseRMod(new Op.MemKit.Dim())); break;
+
       }
 
       return true;
