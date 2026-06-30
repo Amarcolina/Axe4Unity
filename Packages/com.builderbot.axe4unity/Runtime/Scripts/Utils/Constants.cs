@@ -10,6 +10,7 @@ namespace Axe4Unity {
     public const int SCREEN_WIDTH_BYTES = 12;
 
     public const int FILE_HANDLE_ID_INVALID = 0;
+    public const int FILE_HEADER_SIZE = 2;
 
   }
 }

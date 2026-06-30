@@ -14,11 +14,12 @@ namespace Axe4Unity {
       return Compile(tokens, Path.GetDirectoryName(filePath));
     }
 
-    public static Program Compile(List<List<Token>> parsedLines, string workingDirectory = null) {
+    public static Program Compile(List<List<Token>> parsedLines, string workingDirectory = null, Program context = null) {
       var compiler = new Compiler();
 
       compiler.WorkingDir = workingDirectory;
       compiler.Program = new();
+      compiler.Context = context;
       compiler.Program.Lines = parsedLines.Select(p => {
         return new Program.Line() {
           Tokens = p
@@ -31,6 +32,7 @@ namespace Axe4Unity {
     internal ushort LetterVarAddress = Machine.ADDR_LETTER_VARS;
 
     internal Program Program;
+    internal Program Context;
 
     internal string WorkingDir;
     internal List<Token> Tokens;
@@ -1351,8 +1353,10 @@ namespace Axe4Unity {
         }
       } else if (Machine.TryGetAddressOfBuiltInStaticVariable(name, out addr)) {
         return (ushort)addr;
+      } else if (Context != null && Context.TryGetVarAddress(name, out addr)) {
+        return (ushort)addr;
       } else {
-        return 12345;
+        return 0xDEAD;
       }
     }
 

@@ -59,12 +59,18 @@ namespace Axe4Unity {
     private void LateUpdate() {
       _residual -= Time.deltaTime;
       if (_residual < 0) {
-        _residual = Mathf.Min(_residual, -1f / UpdateFPS) + 1f / UpdateFPS;
+        int framesToSim = 0;
+        while (_residual < 0) {
+          _residual += 1f / UpdateFPS;
+          framesToSim++;
+        }
+
         new BufferResponseTimeJob() {
           Src = _rawScreen,
           Dst = _interpolatedScreen,
           TurnOnLerp = UseResponseTime ? TurnOnLerp : 1,
-          TurnOffLerp = UseResponseTime ? TurnOffLerp : 1
+          TurnOffLerp = UseResponseTime ? TurnOffLerp : 1,
+          Frames = framesToSim
         }.Run();
         new BufferScaleUpJob() {
           Src = _interpolatedScreen,

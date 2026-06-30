@@ -246,7 +246,7 @@ namespace Axe4Unity {
         }
       }
 
-      if (!Running) {
+      if (!Running && Machine.State.CallStackTop == 0) {
         didDisplay = true;
         displayRMode = 0;
 

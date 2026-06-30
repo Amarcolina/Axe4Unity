@@ -4,6 +4,7 @@ using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 
 namespace Axe4Unity {
+  using static Constants;
 
   public struct MachineStateNative {
 
@@ -315,9 +316,7 @@ namespace Axe4Unity {
     }
 
     public bool TryCreateRAMFile(FixedString32Bytes name, int size, out int addr) {
-      const int HEADER_SIZE = 2;
-
-      int sizeWithHeader = size + HEADER_SIZE;
+      int sizeWithHeader = size + FILE_HEADER_SIZE;
 
       int addrStart = Machine.ADDR_FREE_RAM;
       int addrEnd = addrStart + sizeWithHeader;
@@ -369,12 +368,12 @@ namespace Axe4Unity {
 
       FileMetadata.Add(new FileMetadata() {
         Name = name,
-        Address = (ushort)(addrStart + HEADER_SIZE),
+        Address = (ushort)(addrStart + FILE_HEADER_SIZE),
         Size = (ushort)size,
         IsArchived = false
       });
 
-      addr = (addrStart + HEADER_SIZE);
+      addr = (addrStart + FILE_HEADER_SIZE);
       return true;
     }
 

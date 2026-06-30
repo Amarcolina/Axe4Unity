@@ -9,6 +9,7 @@ namespace Axe4Unity {
   [BurstCompile]
   public struct BufferToTextureJob : IJob {
 
+    [ReadOnly]
     public NativeSlice<byte> Buffer;
     public NativeSlice<Color32> Pixels;
 

@@ -12,8 +12,9 @@ namespace Axe4Unity {
 
   public class Debugger : EditorWindow {
 
+    public static Debugger Instance;
+
     public const int CONTROL_BAR_HEIGHT = 20;
-    public const int DEBUGGER_BAR_WIDTH = SCREEN_WIDTH * 4;
 
     public const int PROGRAM_LINE_NUM_WIDTH = 46;
     public const int PROGRAM_LINE_HEIGHT = 24;
@@ -30,10 +31,6 @@ namespace Axe4Unity {
 
     public List<int> Breakpoints = new();
 
-    public ExpressionView LetterOffsetView;
-    public List<ExpressionView> ExpressionViews = new();
-    public string CustomAction;
-
     public Vector2 ProgramScroll;
 
     private Dictionary<List<Token>, LineContent> _styledLineCache = new();
@@ -42,13 +39,6 @@ namespace Axe4Unity {
     private AxeRunner _subscribedRunner;
 
     private PauseOn PauseCondition;
-    private GreyPreview _greyPreview;
-
-    private Texture2D _screenPreview;
-    private Texture2D _frontBuffer;
-    private Texture2D _backBuffer;
-
-    private SerializedObject _sObj;
 
     private int _stepLevel;
     private bool _anyWatching;
@@ -59,40 +49,12 @@ namespace Axe4Unity {
     }
 
     private void OnEnable() {
-      Texture2D CreateBuffer() {
-        var buffer = new Texture2D(SCREEN_WIDTH, SCREEN_HEIGHT, TextureFormat.RGBA32, mipChain: false);
-        buffer.filterMode = FilterMode.Point;
-        return buffer;
-      }
-
-      _screenPreview = CreateBuffer();
-      _frontBuffer = CreateBuffer();
-      _backBuffer = CreateBuffer();
-
-      _sObj = new SerializedObject(this);
-
-      LetterOffsetView = new();
-
-      ExpressionViews.Clear();
-      ExpressionViews.Add(new ExpressionView() {
-        Expr = "HL"
-      });
-      for (int i = 0; i < 26; i++) {
-        ExpressionViews.Add(new ExpressionView() {
-          Expr = ((char)('A' + i)).ToString()
-        });
-      }
-      ExpressionViews.Add(new ExpressionView() {
-        Expr = "theta",
-      });
-
+      Instance = this;
       DebuggerSkin = AssetDatabase.LoadAssetAtPath<GUISkin>("Packages/com.builderbot.axe4unity/Editor/GUI/DebuggerSkin.guiskin");
     }
 
     private void OnDisable() {
-      DestroyImmediate(_screenPreview);
-      DestroyImmediate(_frontBuffer);
-      DestroyImmediate(_backBuffer);
+      Instance = null;
 
       if (_subscribedRunner != null) {
         _subscribedRunner.OnStepExecution -= OnStepExecution;
@@ -103,7 +65,9 @@ namespace Axe4Unity {
       Profiler.BeginSample("Axe.Debugger");
       Runner = FindAnyObjectByType<AxeRunner>(FindObjectsInactive.Exclude);
 
-      _anyWatching = ExpressionViews.Any(e => e.IsWatched);
+      _anyWatching = DebuggerAddonVarViewer.All.
+                     SelectMany(v => v.ExpressionViews).
+                     Any(e => e.IsWatched);
 
       Machine = Runner.Machine;
       Program = Runner.Program.Program;
@@ -121,24 +85,14 @@ namespace Axe4Unity {
       }
 
       Rect controlRect = new Rect(0, 0, position.width, CONTROL_BAR_HEIGHT);
-      Rect programViewRect = new Rect(0, CONTROL_BAR_HEIGHT, position.width - DEBUGGER_BAR_WIDTH * 2, position.height - CONTROL_BAR_HEIGHT);
-      Rect debuggerRect = new Rect(position.width - DEBUGGER_BAR_WIDTH * 2, CONTROL_BAR_HEIGHT, DEBUGGER_BAR_WIDTH, position.height - CONTROL_BAR_HEIGHT);
-      Rect screenViewRect = new Rect(position.width - DEBUGGER_BAR_WIDTH, CONTROL_BAR_HEIGHT, DEBUGGER_BAR_WIDTH, position.height - CONTROL_BAR_HEIGHT);
+      Rect programViewRect = new Rect(0, CONTROL_BAR_HEIGHT, position.width, position.height - CONTROL_BAR_HEIGHT);
 
       Profiler.BeginSample("DoControlBar");
       DoControlBar(controlRect);
       Profiler.EndSample();
 
-      Profiler.BeginSample("DoScreenView");
-      DoScreenView(screenViewRect);
-      Profiler.EndSample();
-
       Profiler.BeginSample("DoProgramView");
       DoProgramView(programViewRect);
-      Profiler.EndSample();
-
-      Profiler.BeginSample("DoDebuggerView");
-      DoDebuggerView(debuggerRect);
       Profiler.EndSample();
 
       Repaint();
@@ -183,30 +137,23 @@ namespace Axe4Unity {
       }
 
       if (_anyWatching) {
-        var prevHL = Machine.State.HL;
-        foreach (var expr in ExpressionViews) {
-          if (!expr.IsWatched) {
-            continue;
-          }
-
-          Machine.State.HL = 0;
-          try {
-            foreach (var item in expr.Ops) {
-              item.Op.Execute(ref Machine.State);
+        foreach (var varViewer in DebuggerAddonVarViewer.All) {
+          foreach (var expr in varViewer.ExpressionViews) {
+            if (!expr.IsWatched) {
+              continue;
             }
 
-            ushort newValue = Machine.State.HL;
-            if (newValue != expr.CurrValue) {
+            ushort prevValue = expr.CurrValue;
+            expr.Execute(Machine);
+            ushort newValue = expr.CurrValue;
+
+            if (expr.Result == ExpressionResult.Success &&
+                newValue != prevValue) {
               shouldPause = true;
-              Debug.Log($"Expression {expr.Expr} changed from {expr.CurrValue} to {newValue} on op {executed.Op.GetType().Name} on line {executed.LineIndex}");
+              Debug.Log($"Expression {expr.Expr} changed from {prevValue} to {newValue} on op {executed.Op.GetType().Name} on line {executed.LineIndex}");
             }
-
-            expr.CurrValue = newValue;
-          } catch (Exception e) {
-            Debug.LogException(e);
           }
         }
-        Machine.State.HL = prevHL;
       }
 
       if (shouldPause) {
@@ -339,223 +286,6 @@ namespace Axe4Unity {
       GUI.EndScrollView();
     }
 
-    private void DoScreenView(Rect rect) {
-      if (Machine == null || Machine.Program == null) {
-        return;
-      }
-
-      if (Event.current.type == EventType.Repaint) {
-        new BufferToTextureJob() {
-          Buffer = Machine.State.Memory.Slice(Machine.ADDR_L6, SCREEN_BYTES),
-          Pixels = _frontBuffer.GetPixelData<Color32>(0)
-        }.Run();
-
-        new BufferToTextureJob() {
-          Buffer = Machine.State.Memory.Slice(Machine.ADDR_L3, SCREEN_BYTES),
-          Pixels = _backBuffer.GetPixelData<Color32>(0)
-        }.Run();
-
-        switch (_greyPreview) {
-          case GreyPreview.Grey3:
-            new BufferToTexture3ColorGreyscaleJob() {
-              Memory = Machine.State.Memory,
-              AddrBack = Machine.ADDR_L3,
-              AddrFront = Machine.ADDR_L6,
-              Pixels = _screenPreview.GetPixelData<Color32>(0)
-            }.Run();
-            break;
-          case GreyPreview.Grey4:
-            new BufferToTexture4ColorGreyscaleJob() {
-              Memory = Machine.State.Memory,
-              AddrBack = Machine.ADDR_L3,
-              AddrFront = Machine.ADDR_L6,
-              Pixels = _screenPreview.GetPixelData<Color32>(0)
-            }.Run();
-            break;
-        }
-
-        _frontBuffer.Apply();
-        _backBuffer.Apply();
-        _screenPreview.Apply();
-      }
-
-      using (new GUILayout.AreaScope(rect)) {
-        void DrawTexLayout(Texture2D tex) {
-          var r = GUILayoutUtility.GetRect(tex.width * 4, tex.height * 4);
-          GUI.DrawTexture(r, tex);
-        }
-
-        GUILayout.Label("Front Buffer");
-        DrawTexLayout(_frontBuffer);
-
-        GUILayout.Label("Back Buffer");
-        DrawTexLayout(_backBuffer);
-
-        using (new GUILayout.HorizontalScope()) {
-          GUILayout.Label("Grey");
-          if (GUILayout.Button("Off")) {
-            _greyPreview = GreyPreview.None;
-          }
-          if (GUILayout.Button("3")) {
-            _greyPreview = GreyPreview.Grey3;
-          }
-          if (GUILayout.Button("4")) {
-            _greyPreview = GreyPreview.Grey4;
-          }
-        }
-
-        if (_greyPreview != GreyPreview.None) {
-          DrawTexLayout(_screenPreview);
-        }
-      }
-    }
-
-    private void DoDebuggerView(Rect rect) {
-      if (Machine == null || Machine.Program == null) {
-        return;
-      }
-
-      using (new GUILayout.AreaScope(rect)) {
-        if (Machine.NextOp != null) {
-          EditorGUILayout.LabelField("Next Op: " + Machine.NextOp.Type);
-        }
-
-        GUILayout.FlexibleSpace();
-
-        GUILayout.Label("Arg Stack: (" + Machine.State.ArgStackTop + " items)");
-        for (int i = 0; i < Machine.State.ArgStackTop; i++) {
-          var item = Machine.State.ArgStack[i];
-          using (new GUILayout.HorizontalScope()) {
-            GUILayout.TextField($"{item:X4}");
-            GUILayout.TextField(item.ToString());
-            GUILayout.TextField(((short)item).ToString());
-          }
-        }
-
-        GUILayout.Space(10);
-
-        ushort prevHL = Machine.State.HL;
-        try {
-          int letterOffset = 0;
-
-          using (new GUILayout.HorizontalScope()) {
-            GUILayout.Label("Letter Offset:");
-            EditorGUI.BeginChangeCheck();
-            LetterOffsetView.Expr = GUILayout.TextField(LetterOffsetView.Expr);
-            if (EditorGUI.EndChangeCheck()) {
-              LetterOffsetView.UpToDate = false;
-              foreach (var expr in ExpressionViews) {
-                expr.UpToDate = false;
-              }
-            }
-
-            UpdateExpressionView(LetterOffsetView, 0);
-
-            Machine.State.HL = 0;
-            if (LetterOffsetView.Ops != null) {
-              try {
-                foreach (var item in LetterOffsetView.Ops) {
-                  item.Op.Execute(ref Machine.State);
-                }
-                letterOffset = Machine.State.HL;
-              } catch { }
-            }
-          }
-
-          foreach (var expr in ExpressionViews) {
-            using (new GUILayout.HorizontalScope()) {
-              EditorGUI.BeginChangeCheck();
-              expr.Expr = GUILayout.TextField(expr.Expr);
-              if (EditorGUI.EndChangeCheck()) {
-                expr.UpToDate = false;
-              }
-
-              UpdateExpressionView(expr, letterOffset);
-
-              string hexResult = "-";
-              string unsignedResult = "-";
-              string signedResult = "-";
-
-              if (expr.Ops != null) {
-                Machine.State.HL = (ushort)(expr.Expr == "HL" ? prevHL : 0);
-                try {
-                  foreach (var item in expr.Ops) {
-                    item.Op.Execute(ref Machine.State);
-                  }
-
-                  hexResult = $"0x{Machine.State.HL:X4}";
-                  unsignedResult = $"{Machine.State.HL}";
-                  signedResult = $"{(short)Machine.State.HL}";
-
-                  expr.CurrValue = Machine.State.HL;
-                } catch (Exception e) {
-                  Debug.LogException(e);
-                  GUI.color = Color.red;
-                }
-              } else {
-                GUI.color = Color.yellow;
-              }
-
-              EditorGUILayout.TextField(hexResult, GUILayout.Width(60));
-              EditorGUILayout.TextField(unsignedResult, GUILayout.Width(60));
-              EditorGUILayout.TextField(signedResult, GUILayout.Width(60));
-
-              GUI.color = expr.IsWatched ? Color.green : Color.white;
-              if (GUILayout.Button("Watch", GUILayout.Width(48))) {
-                expr.IsWatched = !expr.IsWatched;
-              }
-              GUI.color = Color.white;
-
-              GUI.color = Color.white;
-            }
-          }
-
-          GUILayout.Space(10);
-
-          using (new GUILayout.HorizontalScope()) {
-            CustomAction = EditorGUILayout.TextField(CustomAction);
-
-            if (GUILayout.Button("Execute")) {
-              var tokens = Token.ParseLine(CustomAction);
-              var lines = Parser.ParseLines(tokens);
-              var program = Compiler.Compile(lines);
-              program.Lines.RemoveAt(program.Lines.Count - 1);
-              Machine.State.HL = 0;
-              foreach (var line in program.Lines) {
-                foreach (var item in line.Ops) {
-                  item.Op.Execute(ref Machine.State);
-                }
-              }
-            }
-          }
-        } finally {
-          Machine.State.HL = prevHL;
-        }
-      }
-    }
-
-    private void UpdateExpressionView(ExpressionView expr, int letterOffset) {
-      if (!expr.UpToDate) {
-        try {
-          if (expr.Expr == "HL") {
-            expr.Ops = new List<OpAndMetaData>();
-          } else {
-            var program = Compiler.Compile(new List<List<Token>>() {
-              Token.ParseLine($"real({letterOffset})"),
-              Token.ParseLine(expr.Expr)
-            });
-
-            expr.Ops = program.Lines.SelectMany(l => l.Ops).Where(o => o.Op is not Op.Return).ToList();
-          }
-
-          expr.UpToDate = true;
-        } catch (Exception) {
-          expr.UpToDate = false;
-          expr.Ops = null;
-        }
-      }
-    }
-
     private LineContent GetStyledLine(Program.Line line) {
       if (_styledLineCache.TryGetValue(line.Tokens, out var content)) {
         return content;
@@ -593,9 +323,73 @@ namespace Axe4Unity {
 
       public bool IsWatched;
       public ushort CurrValue;
+      public ExpressionResult Result;
 
       [NonSerialized]
       public bool UpToDate = false;
+
+      public bool OnGUI(string label = null) {
+        EditorGUI.BeginChangeCheck();
+        if (label == null) {
+          Expr = GUILayout.TextField(Expr);
+        } else {
+          Expr = EditorGUILayout.TextField(label, Expr);
+        }
+        if (EditorGUI.EndChangeCheck()) {
+          UpToDate = false;
+          return true;
+        }
+        return false;
+      }
+
+      public void Parse(int letterAddress, Machine machine) {
+        if (!UpToDate) {
+          try {
+            if (Expr == "HL") {
+              Ops = new List<OpAndMetaData>();
+            } else {
+              var program = Compiler.Compile(new List<List<Token>>() {
+                Token.ParseLine($"real({letterAddress})"),
+                Token.ParseLine(Expr)
+              }, context: machine.Program);
+
+              Ops = program.Lines.SelectMany(l => l.Ops).Where(o => o.Op is not Op.Return).ToList();
+            }
+
+            UpToDate = true;
+          } catch (Exception) {
+            UpToDate = false;
+            Ops = null;
+          }
+        }
+      }
+
+      public void Execute(Machine machine) {
+        ushort prevHL = machine.State.HL;
+        machine.State.HL = 0;
+        try {
+          if (Ops != null) {
+            machine.State.HL = (ushort)(Expr == "HL" ? prevHL : 0);
+            try {
+              foreach (var item in Ops) {
+                item.Op.Execute(ref machine.State);
+              }
+
+              CurrValue = machine.State.HL;
+              Result = ExpressionResult.Success;
+            } catch (Exception e) {
+              Debug.LogException(e);
+              CurrValue = 0;
+              Result = ExpressionResult.Error;
+            }
+          } else {
+            CurrValue = 0;
+            Result = ExpressionResult.Warn;
+          }
+        } finally {
+          machine.State.HL = prevHL;
+        }
+      }
     }
 
     private enum PauseOn {
@@ -608,10 +402,10 @@ namespace Axe4Unity {
       Frame
     }
 
-    private enum GreyPreview {
-      None,
-      Grey3,
-      Grey4
+    public enum ExpressionResult {
+      Success,
+      Warn,
+      Error
     }
   }
 }

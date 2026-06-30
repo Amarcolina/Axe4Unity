@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.TestTools;
 
 namespace Axe4Unity {
+  using static Constants;
 
   public class TestsFiles : TestBase {
 
@@ -21,11 +22,11 @@ namespace Axe4Unity {
     public void TestCanCreateFile() {
       Execute("GetCalc(\"FOO\", 10)->A");
 
-      Assert.That(GetFile("FOO").Address, Is.EqualTo(Machine.ADDR_FREE_RAM));
+      Assert.That(GetFile("FOO").Address, Is.EqualTo(Machine.ADDR_FREE_RAM + FILE_HEADER_SIZE));
       Assert.That(GetFile("FOO").Size, Is.EqualTo(10));
       Assert.That(GetFile("FOO").IsArchived, Is.False);
       Assert.That(GetFile("FOO").Name, Is.EqualTo("FOO"));
-      Assert.That(U16("A"), Is.EqualTo(Machine.ADDR_FREE_RAM));
+      Assert.That(U16("A"), Is.EqualTo(Machine.ADDR_FREE_RAM + FILE_HEADER_SIZE));
     }
 
     [Test]
@@ -41,8 +42,8 @@ namespace Axe4Unity {
       Execute("GetCalc(\"FOO\", 10)->A",
               "GetCalc(\"BAR\", 20)->B");
 
-      Assert.That(GetFile("FOO").Address, Is.EqualTo(Machine.ADDR_FREE_RAM));
-      Assert.That(GetFile("BAR").Address, Is.EqualTo(Machine.ADDR_FREE_RAM + 10));
+      Assert.That(GetFile("FOO").Address, Is.EqualTo(Machine.ADDR_FREE_RAM + FILE_HEADER_SIZE));
+      Assert.That(GetFile("BAR").Address, Is.EqualTo(GetFile("FOO").Address + 10 + FILE_HEADER_SIZE));
     }
 
     [Test]
@@ -52,8 +53,8 @@ namespace Axe4Unity {
               "DelVar \"FOO\"",
               "GetCalc(\"BAZ\", 50)->C");
 
-      Assert.That(GetFile("BAR").Address, Is.EqualTo(Machine.ADDR_FREE_RAM + 10));
-      Assert.That(GetFile("BAZ").Address, Is.EqualTo(Machine.ADDR_FREE_RAM + 30));
+      Assert.That(GetFile("BAR").Address, Is.EqualTo(Machine.ADDR_FREE_RAM + 10 + FILE_HEADER_SIZE * 2));
+      Assert.That(GetFile("BAZ").Address, Is.EqualTo(GetFile("BAR").Address + 20 + FILE_HEADER_SIZE));
     }
 
     [Test]
