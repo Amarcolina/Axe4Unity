@@ -9,7 +9,7 @@ namespace Axe4Unity {
 
     public byte[] Memory;
     public List<MountedFile> MountedFiles;
-    public List<RamFile> RamFiles;
+    public List<FileMetadata> FileMetadata;
     public List<ProgramCounter> CallStack;
     public List<ushort> ArgStack;
     public ushort HL;
@@ -22,9 +22,9 @@ namespace Axe4Unity {
         machine.MountedFiles.Add(item.Id, item.Name);
       }
 
-      machine.RamFiles.Clear();
-      foreach (var item in RamFiles) {
-        machine.RamFiles.Add(item.Name, (item.Addr, item.Size));
+      machine.FileMetadata.Clear();
+      foreach (var item in FileMetadata) {
+        machine.FileMetadata.Add(item);
       }
 
       machine.CallStackTop = CallStack.Count;
@@ -54,13 +54,9 @@ namespace Axe4Unity {
         });
       }
 
-      RamFiles = new();
-      foreach (var pair in machine.RamFiles) {
-        RamFiles.Add(new RamFile() {
-          Name = pair.Key.ToString(),
-          Addr = pair.Value.ptr,
-          Size = pair.Value.size
-        });
+      FileMetadata = new();
+      foreach (var file in machine.FileMetadata) {
+        FileMetadata.Add(file);
       }
 
       CallStack = new List<ProgramCounter>(machine.CallStack.Slice(0, machine.CallStackTop));
@@ -72,13 +68,6 @@ namespace Axe4Unity {
     public struct MountedFile {
       public ushort Id;
       public string Name;
-    }
-
-    [Serializable]
-    public struct RamFile {
-      public string Name;
-      public ushort Addr;
-      public ushort Size;
     }
   }
 }

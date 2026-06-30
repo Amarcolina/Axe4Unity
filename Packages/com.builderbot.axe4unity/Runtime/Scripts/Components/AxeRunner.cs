@@ -84,9 +84,9 @@ namespace Axe4Unity {
 
       foreach (var entry in AppVars) {
         if (entry.Archive) {
-          _machine.AddToArchive("appv" + entry.AppVar.name, entry.AppVar.GetData());
+          _machine.AddToArchive("\x15" + entry.AppVar.name, entry.AppVar.GetData());
         } else {
-          bool didAdd = _machine.TryAddToRAM("appv" + entry.AppVar.name, entry.AppVar.GetData());
+          bool didAdd = _machine.TryAddToRAM("\x15" + entry.AppVar.name, entry.AppVar.GetData());
           if (!didAdd) {
             Debug.LogError($"Could not add appvar {entry.AppVar.name} because there was not enough free RAM!", entry.AppVar);
           }

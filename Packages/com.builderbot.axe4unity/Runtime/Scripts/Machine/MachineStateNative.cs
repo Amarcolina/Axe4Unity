@@ -10,7 +10,7 @@ namespace Axe4Unity {
     public NativeArray<byte> Memory;
 
     public NativeHashMap<FixedString32Bytes, UnsafeList<byte>> ArchiveFiles;
-    public NativeHashMap<FixedString32Bytes, (ushort ptr, ushort size)> RamFiles;
+    public NativeList<FileMetadata> FileMetadata;
 
     //Maps file handles to the file names they point to
     public NativeHashMap<ushort, FixedString32Bytes> MountedFiles;
@@ -87,11 +87,26 @@ namespace Axe4Unity {
       set => Write_U8(Machine.ADDR_PEN_Y, (byte)value);
     }
 
+    public int DispCursorX {
+      get => Read_U8(Machine.ADDR_DISP_X);
+      set => Write_U8(Machine.ADDR_DISP_X, (byte)value);
+    }
+
+    public int DispCursorY {
+      get => Read_U8(Machine.ADDR_DISP_Y);
+      set => Write_U8(Machine.ADDR_DISP_Y, (byte)value);
+    }
+
+    public int MemKitIndex {
+      get => Read_U16(Machine.ADDR_MEMKIT_CURR);
+      set => Write_U16(Machine.ADDR_MEMKIT_CURR, (ushort)value);
+    }
+
     public void Init(BitFont largeFont, BitFont smallFont) {
       Memory = new NativeArray<byte>(65536, Allocator.Persistent);
       MountedFiles = new NativeHashMap<ushort, FixedString32Bytes>(256, Allocator.Persistent);
       ArchiveFiles = new NativeHashMap<FixedString32Bytes, UnsafeList<byte>>(256, Allocator.Persistent);
-      RamFiles = new NativeHashMap<FixedString32Bytes, (ushort, ushort)>(256, Allocator.Persistent);
+      FileMetadata = new NativeList<FileMetadata>(Allocator.Persistent);
 
       if (largeFont != null) {
         LargeFont = largeFont.ToNative();
@@ -111,7 +126,7 @@ namespace Axe4Unity {
       ResetAllFiles();
 
       if (ArchiveFiles.IsCreated) ArchiveFiles.Dispose();
-      if (RamFiles.IsCreated) RamFiles.Dispose();
+      if (FileMetadata.IsCreated) FileMetadata.Dispose();
       if (MountedFiles.IsCreated) MountedFiles.Dispose();
       if (Memory.IsCreated) Memory.Dispose();
 
@@ -133,19 +148,24 @@ namespace Axe4Unity {
       }
 
       if (MountedFiles.IsCreated) MountedFiles.Clear();
-      if (RamFiles.IsCreated) RamFiles.Clear();
+      if (FileMetadata.IsCreated) FileMetadata.Clear();
     }
 
     public void Reset(Machine machine) {
       CallStackTop = 0;
       ArgStackTop = 0;
 
-      RamFiles.Clear();
+      FileMetadata.Clear();
       MountedFiles.Clear();
 
       for (int i = 0; i < Memory.Length; i++) {
         Memory[i] = 255;
       }
+
+      TextCursorX = 0;
+      TextCursorY = 0;
+      DispCursorX = 0;
+      DispCursorY = 0;
 
       foreach ((var addr, var size, var name) in Machine.BuiltInMemoryLocations) {
         for (int i = 0; i < size; i++) {
@@ -253,15 +273,27 @@ namespace Axe4Unity {
         throw new InvalidOperationException($"Could not load file at index {fileId}, was it loaded?");
       }
 
-      if (ArchiveFiles.TryGetValue(fileName, out var data)) {
-        return data;
-      } else if (RamFiles.TryGetValue(fileName, out var entry)) {
-        unsafe {
-          return new UnsafeList<byte>((byte*)Memory.GetUnsafePtr(), Memory.Length);
+      return GetArchiveFileData(fileName);
+    }
+
+    public UnsafeList<byte> GetArchiveFileData(FixedString32Bytes fileName) {
+      foreach (var metaData in FileMetadata) {
+        if (metaData.Name == fileName) {
+          if (metaData.IsArchived) {
+            if (ArchiveFiles.TryGetValue(fileName, out var data)) {
+              return data;
+            } else {
+              throw new InvalidOperationException($"Tried to get data for archived file {fileName} but it was missing!");
+            }
+          } else {
+            unsafe {
+              return new UnsafeList<byte>((byte*)Memory.GetUnsafePtr(), Memory.Length);
+            }
+          }
         }
-      } else {
-        throw new InvalidOperationException($"Tried to get file with name {fileName} but it wasn't found!");
       }
+
+      throw new InvalidOperationException($"Tried to get file with name {fileName} but it wasn't found!");
     }
 
     public NativeSlice<byte> GetBuffer(int addr, int size) {
@@ -272,19 +304,34 @@ namespace Axe4Unity {
       UnsafeList<byte> file = new UnsafeList<byte>(size, Allocator.Persistent);
       file.Length = size;
       ArchiveFiles[name] = file;
+
+      FileMetadata.Add(new FileMetadata() {
+        Name = name,
+        Address = 0,
+        Size = (ushort)size,
+        IsArchived = true
+      });
       return file;
     }
 
     public bool TryCreateRAMFile(FixedString32Bytes name, int size, out int addr) {
+      const int HEADER_SIZE = 2;
+
+      int sizeWithHeader = size + HEADER_SIZE;
+
       int addrStart = Machine.ADDR_FREE_RAM;
-      int addrEnd = addrStart + size;
+      int addrEnd = addrStart + sizeWithHeader;
 
       while (true) {
         bool isSpaceFree = true;
 
-        foreach (var entry in RamFiles) {
-          var entryStart = entry.Value.ptr;
-          var entryEnd = entryStart + entry.Value.size;
+        foreach (var entry in FileMetadata) {
+          if (entry.IsArchived) {
+            continue;
+          }
+
+          var entryStart = entry.Address;
+          var entryEnd = entryStart + entry.Size;
 
           if (entryStart < addrEnd && entryEnd > addrStart) {
             isSpaceFree = false;
@@ -297,8 +344,8 @@ namespace Axe4Unity {
         }
 
         int newAddr = int.MaxValue;
-        foreach (var entry in RamFiles) {
-          var candidateAddr = entry.Value.ptr + entry.Value.size;
+        foreach (var entry in FileMetadata) {
+          var candidateAddr = entry.Address + entry.Size;
 
           if (candidateAddr <= addrStart) {
             continue;
@@ -315,26 +362,48 @@ namespace Axe4Unity {
         }
 
         addrStart = newAddr;
-        addrEnd = addrStart + size;
+        addrEnd = addrStart + sizeWithHeader;
       }
 
-      RamFiles[name] = ((ushort)addrStart, (ushort)size);
+      Write_U16(addrStart, (ushort)size);
 
-      addr = addrStart;
+      FileMetadata.Add(new FileMetadata() {
+        Name = name,
+        Address = (ushort)(addrStart + HEADER_SIZE),
+        Size = (ushort)size,
+        IsArchived = false
+      });
+
+      addr = (addrStart + HEADER_SIZE);
       return true;
     }
 
-    public bool DeleteRAMFile(FixedString32Bytes name) {
-      return RamFiles.Remove(name);
+    public int IndexOfFile(FixedString32Bytes name) {
+      for (int i = 0; i < FileMetadata.Length; i++) {
+        if (FileMetadata[i].Name == name) {
+          return i;
+        }
+      }
+      return -1;
     }
 
-    public bool DeleteArchiveFile(FixedString32Bytes name) {
-      if (!ArchiveFiles.TryGetValue(name, out var file)) {
+    public bool DeleteFile(FixedString32Bytes name) {
+      int index = IndexOfFile(name);
+      if (index < 0) {
         return false;
       }
 
-      file.Dispose();
-      ArchiveFiles.Remove(name);
+      var file = FileMetadata[index];
+      if (file.IsArchived) {
+        if (ArchiveFiles.TryGetValue(name, out var data)) {
+          data.Dispose();
+          ArchiveFiles.Remove(name);
+        } else {
+          throw new InvalidOperationException($"Tried to get data for archived file {name} but it was missing!");
+        }
+      }
+
+      FileMetadata.RemoveAt(index);
       return true;
     }
   }

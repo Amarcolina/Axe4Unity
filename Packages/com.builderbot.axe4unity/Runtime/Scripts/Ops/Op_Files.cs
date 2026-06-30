@@ -29,7 +29,7 @@ namespace Axe4Unity.Op {
         machine.Write_U8(addr + i, file[i]);
       }
 
-      machine.DeleteArchiveFile(name);
+      machine.DeleteFile(name);
 
       machine.HL = 1;
     }
@@ -44,18 +44,25 @@ namespace Axe4Unity.Op {
     public void Execute(ref MachineStateNative machine) {
       var name = Utils.PtrToString(machine, machine.PopArg());
 
-      if (!machine.RamFiles.TryGetValue(name, out var entry)) {
+      int index = machine.IndexOfFile(name);
+      if (index < 0) {
         Debug.Log($"Tried to archive file {name} but it was not found!");
         machine.HL = 0;
       }
 
-      var file = machine.CreateArchiveFile(name, entry.size);
-
-      for (int i = 0; i < file.Length; i++) {
-        file[i] = (byte)machine.Read_U8(entry.ptr + i);
+      var file = machine.FileMetadata[index];
+      if (file.IsArchived) {
+        Debug.Log($"Tried to archive file {name} but it was already in the archive");
+        machine.HL = 0;
       }
 
-      machine.DeleteRAMFile(name);
+      var data = machine.CreateArchiveFile(name, file.Size);
+
+      for (int i = 0; i < data.Length; i++) {
+        data[i] = (byte)machine.Read_U8(file.Address + i);
+      }
+      
+      machine.DeleteFile(name);
 
       machine.HL = 1;
     }
@@ -69,7 +76,7 @@ namespace Axe4Unity.Op {
 
     public void Execute(ref MachineStateNative machine) {
       var name = Utils.PtrToString(machine, machine.PopArg());
-      machine.DeleteRAMFile(name);
+      machine.DeleteFile(name);
     }
   }
 
@@ -79,12 +86,21 @@ namespace Axe4Unity.Op {
     public void Execute(ref MachineStateNative machine) {
       var name = Utils.PtrToString(machine, machine.HL);
 
-      if (machine.RamFiles.TryGetValue(name, out var entry)) {
-        machine.HL = entry.ptr;
-      } else {
-        Debug.Log($"Could not find file {name} in RAM");
+      int index = machine.IndexOfFile(name);
+      if (index < 0) {
+        Debug.Log($"Could not find file {name} on system");
         machine.HL = 0;
       }
+
+      var file = machine.FileMetadata[index];
+      if (file.IsArchived) {
+        Debug.Log($"Tried to load file {name} but it was archived");
+        machine.HL = 0;
+      }
+
+      Debug.Log($"Loaded file {name} from ram");
+
+      machine.HL = file.Address;
     }
   }
 
@@ -96,19 +112,15 @@ namespace Axe4Unity.Op {
     public void Execute(ref MachineStateNative machine) {
       var name = Utils.PtrToString(machine, machine.HL);
 
-      int addr, size;
-      if (machine.ArchiveFiles.TryGetValue(name, out var data)) {
-        addr = 0;
-        size = data.Length;
-      } else if (machine.RamFiles.TryGetValue(name, out var entry)) {
-        addr = entry.ptr;
-        size = entry.size;
-      } else {
+      var index = machine.IndexOfFile(name);
+      if (index < 0) {
         Debug.Log($"Could not mount file with name {name} because it was not found");
         machine.Write_U16(VarAddress + 2, FILE_HANDLE_ID_INVALID);
         machine.HL = 0;
         return;
       }
+
+      var file = machine.FileMetadata[index];
 
       ushort id = 1;
       while (machine.MountedFiles.ContainsKey(id)) {
@@ -117,8 +129,8 @@ namespace Axe4Unity.Op {
 
       Debug.Log($"Mounted file with name {name} into file variable with id {id}");
       machine.MountedFiles[id] = name;
-      machine.Write_U16(VarAddress - 2, (ushort)size);
-      machine.Write_U16(VarAddress, (ushort)addr);
+      machine.Write_U16(VarAddress - 2, file.Size);
+      machine.Write_U16(VarAddress, file.Address);
       machine.Write_U16(VarAddress + 2, id);
       machine.HL = 1;
     }

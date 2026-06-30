@@ -23,6 +23,7 @@ namespace Axe4Unity {
     public const int ADDR_CALLING_ARGS = 0x0300;
     public const int ADDR_SPRITE_TMP = 0x0180;
     public const int ADDR_TEXT_TMP = 0x0600;
+    public const int ADDR_MEMKIT_CURR = 0x06100;
 
     public const int ADDR_FILE_HANDLE = 0x0700;
 
@@ -37,6 +38,8 @@ namespace Axe4Unity {
 
     public const int ADDR_PEN_X = 0x86D7;
     public const int ADDR_PEN_Y = 0x86D8;
+    public const int ADDR_DISP_X = 0x86D9;
+    public const int ADDR_DISP_Y = 0x86DA;
 
     public const int ADDR_FREE_RAM = 0xA000;
 
@@ -47,6 +50,8 @@ namespace Axe4Unity {
       (ADDR_SPRITE_TMP, 8, "__SpriteTmp"),
       (ADDR_CALLING_ARGS, 6 * 2, "__SubArgs"),
       (ADDR_TEXT_TMP, 8, "__TmpText"),
+
+      (ADDR_MEMKIT_CURR, 2, "__MemKitIndex"),
 
       (ADDR_FILE_HANDLE + 6 * 0 + 0, 2, "__Y1Size"),
       (ADDR_FILE_HANDLE + 6 * 0 + 2, 2, "`Y1"),

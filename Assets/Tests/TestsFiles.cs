@@ -1,4 +1,5 @@
-using System.Collections;
+using System;
+using System.Linq;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
 using UnityEngine;
@@ -8,13 +9,22 @@ namespace Axe4Unity {
 
   public class TestsFiles : TestBase {
 
+    public FileMetadata GetFile(string name) {
+      int index = Machine.State.IndexOfFile(name);
+      if (index < 0) {
+        throw new InvalidOperationException($"Could not load file with name {name}");
+      }
+      return Machine.State.FileMetadata[index];
+    }
+
     [Test]
     public void TestCanCreateFile() {
       Execute("GetCalc(\"FOO\", 10)->A");
 
-      Assert.That(Machine.State.RamFiles.ContainsKey("FOO"));
-      Assert.That(Machine.State.RamFiles["FOO"].ptr, Is.EqualTo(Machine.ADDR_FREE_RAM));
-      Assert.That(Machine.State.RamFiles["FOO"].size, Is.EqualTo(10));
+      Assert.That(GetFile("FOO").Address, Is.EqualTo(Machine.ADDR_FREE_RAM));
+      Assert.That(GetFile("FOO").Size, Is.EqualTo(10));
+      Assert.That(GetFile("FOO").IsArchived, Is.False);
+      Assert.That(GetFile("FOO").Name, Is.EqualTo("FOO"));
       Assert.That(U16("A"), Is.EqualTo(Machine.ADDR_FREE_RAM));
     }
 
@@ -23,7 +33,7 @@ namespace Axe4Unity {
       Execute("GetCalc(\"FOO\", 10)",
               "DelVar \"FOO\"");
 
-      Assert.That(Machine.State.RamFiles.Count, Is.Zero);
+      Assert.That(Machine.State.FileMetadata.Length, Is.Zero);
     }
 
     [Test]
@@ -31,11 +41,8 @@ namespace Axe4Unity {
       Execute("GetCalc(\"FOO\", 10)->A",
               "GetCalc(\"BAR\", 20)->B");
 
-      Assert.That(Machine.State.RamFiles.ContainsKey("FOO"));
-      Assert.That(Machine.State.RamFiles.ContainsKey("BAR"));
-
-      Assert.That(Machine.State.RamFiles["FOO"].ptr, Is.EqualTo(Machine.ADDR_FREE_RAM));
-      Assert.That(Machine.State.RamFiles["BAR"].ptr, Is.EqualTo(Machine.ADDR_FREE_RAM + 10));
+      Assert.That(GetFile("FOO").Address, Is.EqualTo(Machine.ADDR_FREE_RAM));
+      Assert.That(GetFile("BAR").Address, Is.EqualTo(Machine.ADDR_FREE_RAM + 10));
     }
 
     [Test]
@@ -45,11 +52,8 @@ namespace Axe4Unity {
               "DelVar \"FOO\"",
               "GetCalc(\"BAZ\", 50)->C");
 
-      Assert.That(Machine.State.RamFiles.ContainsKey("BAR"));
-      Assert.That(Machine.State.RamFiles.ContainsKey("BAZ"));
-
-      Assert.That(Machine.State.RamFiles["BAR"].ptr, Is.EqualTo(Machine.ADDR_FREE_RAM + 10));
-      Assert.That(Machine.State.RamFiles["BAZ"].ptr, Is.EqualTo(Machine.ADDR_FREE_RAM + 30));
+      Assert.That(GetFile("BAR").Address, Is.EqualTo(Machine.ADDR_FREE_RAM + 10));
+      Assert.That(GetFile("BAZ").Address, Is.EqualTo(Machine.ADDR_FREE_RAM + 30));
     }
 
     [Test]
@@ -60,7 +64,10 @@ namespace Axe4Unity {
               "End",
               "Archive \"FOO\"");
 
-      Assert.That(Machine.State.RamFiles.Count, Is.Zero);
+      Assert.That(GetFile("FOO").Address, Is.Zero);
+      Assert.That(GetFile("FOO").IsArchived, Is.True);
+      Assert.That(Machine.State.FileMetadata.Length, Is.EqualTo(1));
+
       Assert.That(Machine.State.ArchiveFiles.ContainsKey("FOO"));
 
       var file = Machine.State.ArchiveFiles["FOO"];
@@ -81,8 +88,10 @@ namespace Axe4Unity {
               "UnArchive \"FOO\"",
               "GetCalc(\"FOO\")->B");
 
+      Assert.That(GetFile("FOO").Address, Is.Not.Zero);
+      Assert.That(GetFile("FOO").IsArchived, Is.False);
+      Assert.That(Machine.State.FileMetadata.Length, Is.EqualTo(1));
       Assert.That(Machine.State.ArchiveFiles.Count, Is.Zero);
-      Assert.That(Machine.State.RamFiles.ContainsKey("FOO"));
 
       for (int i = 0; i < 10; i++) {
         Assert.That(U8(U16("B") + i), Is.EqualTo(i));

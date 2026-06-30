@@ -2201,8 +2201,8 @@
         "langs": {
           "en": {
             "ti-ascii": "76",
-            "display": "appv",
-            "accessible": "appv"
+            "display": "\\x15",
+            "accessible": "\\x15"
           }
         }
       }
@@ -6437,23 +6437,6 @@
     }
   ],
   "$B5": [
-    {
-      "since": {
-        "model": "TI-82",
-        "os-version": "1.0"
-      },
-      "until": {
-        "model": "TI-83",
-        "os-version": "0.01013"
-      },
-      "langs": {
-        "en": {
-          "ti-ascii": "64696D20",
-          "display": "dim ",
-          "accessible": "dim "
-        }
-      }
-    },
     {
       "since": {
         "model": "TI-83",

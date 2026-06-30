@@ -36,17 +36,17 @@ namespace Axe4Unity.Op {
         bool isNewline = code == '\n';
 
         if (!isNewline) {
-          Utils.DrawGlyph(buffer, font, code, machine.TextCursorX * 6, machine.TextCursorY * 8);
-          machine.TextCursorX++;
+          Utils.DrawGlyph(buffer, font, code, machine.DispCursorX * 6, machine.DispCursorY * 8);
+          machine.DispCursorX++;
         }
 
-        if (machine.TextCursorX == 16 || isNewline) {
-          machine.TextCursorX = 0;
-          machine.TextCursorY++;
+        if (machine.DispCursorX == 16 || isNewline) {
+          machine.DispCursorX = 0;
+          machine.DispCursorY++;
 
-          if (machine.TextCursorY == 8) {
-            machine.TextCursorX = 0;
-            machine.TextCursorY = 7;
+          if (machine.DispCursorY == 8) {
+            machine.DispCursorX = 0;
+            machine.DispCursorY = 7;
 
             for (int y = 0; y < (SCREEN_HEIGHT - 8); y++) {
               for (int x = 0; x < SCREEN_WIDTH_BYTES; x++) {
