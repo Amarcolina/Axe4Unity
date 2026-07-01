@@ -23,12 +23,11 @@ namespace Axe4Unity.Op {
     bool IOpLoopExit.ShouldExit => true;
 
     public void Execute(ref MachineStateNative machine) {
-      var buffer = machine.GetBuffer(Machine.ADDR_SCREEN_FRONT, SCREEN_BYTES);
+      var buffer = machine.GetBuffer(Machine.ADDR_L2, HOME_SCREEN_BYTES);
       int addr = machine.HL;
-      var font = machine.LargeFont;
 
       while (machine.Memory[addr] != 0) {
-        int code = machine.Memory[addr++];
+        var code = machine.Memory[addr++];
         if (code == 0) {
           break;
         }
@@ -36,32 +35,24 @@ namespace Axe4Unity.Op {
         bool isNewline = code == '\n';
 
         if (!isNewline) {
-          Utils.DrawGlyph(buffer, font, code, machine.DispCursorX * 6, machine.DispCursorY * 8);
+          buffer[machine.DispCursorX + machine.DispCursorY * HOME_SCREEN_WIDTH] = code;
           machine.DispCursorX++;
         }
 
-        if (machine.DispCursorX == 16 || isNewline) {
+        if (machine.DispCursorX == HOME_SCREEN_WIDTH || isNewline) {
           machine.DispCursorX = 0;
           machine.DispCursorY++;
 
-          if (machine.DispCursorY == 8) {
+          if (machine.DispCursorY == HOME_SCREEN_HEIGHT) {
             machine.DispCursorX = 0;
-            machine.DispCursorY = 7;
+            machine.DispCursorY = HOME_SCREEN_HEIGHT - 1;
 
-            for (int y = 0; y < (SCREEN_HEIGHT - 8); y++) {
-              for (int x = 0; x < SCREEN_WIDTH_BYTES; x++) {
-                buffer[y * SCREEN_WIDTH_BYTES + x] = buffer[y * SCREEN_WIDTH_BYTES + x + SCREEN_WIDTH_BYTES * 8];
-              }
-            }
-
-            for (int y = (SCREEN_HEIGHT - 8); y < SCREEN_HEIGHT; y++) {
-              for (int x = 0; x < SCREEN_WIDTH_BYTES; x++) {
-                buffer[y * SCREEN_WIDTH_BYTES + x] = 0;
-              }
-            }
+            Utils.ShiftUpHomeScreen(ref machine);
           }
         }
       }
+
+      Utils.PrintHomeScreen(ref machine);
     }
   }
 
@@ -89,30 +80,34 @@ namespace Axe4Unity.Op {
           break;
         }
         case 3: {
-          var buffer = machine.GetBuffer(Machine.ADDR_SCREEN_FRONT, SCREEN_BYTES);
+          var buffer = machine.GetBuffer(Machine.ADDR_L2, HOME_SCREEN_BYTES);
           var str = machine.PopArg();
           machine.TextCursorY = machine.PopArg();
           machine.TextCursorX = machine.PopArg();
 
           var addr = str;
-          var font = machine.LargeFont;
           while (true) {
-            int code = machine.Memory[addr++];
+            var code = machine.Memory[addr++];
             if (code == 0) {
               break;
             }
 
-            Utils.DrawGlyph(buffer, font, code, machine.TextCursorX * 6, machine.TextCursorY * 8);
+            int index = machine.DispCursorX + machine.DispCursorY * HOME_SCREEN_WIDTH;
+            if (index >= 0 && index < HOME_SCREEN_BYTES) {
+              buffer[index] = code;
+            }
 
-            machine.TextCursorX++;
-            if (machine.TextCursorX == 16) {
-              machine.TextCursorX = 0;
-              machine.TextCursorY++;
+            machine.DispCursorX++;
+            if (machine.DispCursorX == HOME_SCREEN_WIDTH) {
+              machine.DispCursorX = 0;
+              machine.DispCursorY++;
             }
           }
           break;
         }
       }
+
+      Utils.PrintHomeScreen(ref machine);
     }
   }
 

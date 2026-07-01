@@ -17,6 +17,9 @@ namespace Axe4Unity {
 
     private void OnEnable() {
       _nextOpContent = new GUIContent("Next Operation:");
+
+      name = "Op Viewer";
+      titleContent = new GUIContent("Op Viewer");
     }
 
     protected override void DrawAddon() {

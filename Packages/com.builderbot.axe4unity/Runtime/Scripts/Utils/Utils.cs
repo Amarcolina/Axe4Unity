@@ -73,6 +73,34 @@ namespace Axe4Unity {
       return width;
     }
 
+    public static void PrintHomeScreen(ref MachineStateNative machine) {
+      var bufferAddr = Machine.ADDR_L2;
+      var screen = machine.GetBuffer(Machine.ADDR_SCREEN_FRONT, SCREEN_BYTES);
+
+      for (int y = 0; y < HOME_SCREEN_HEIGHT; y++) {
+        for (int x = 0; x < HOME_SCREEN_WIDTH; x++) {
+          char c = (char)machine.Read_U8(bufferAddr++);
+          if (!char.IsControl(c)) {
+            DrawGlyph(screen, machine.LargeFont, c, x * 6, y * 8);
+          } else {
+            DrawGlyph(screen, machine.LargeFont, ' ', x * 6, y * 8);
+          }
+        }
+      }
+    }
+
+    public static void ShiftUpHomeScreen(ref MachineStateNative machine) {
+      var bufferAddr = Machine.ADDR_L2;
+      for (int i = 0; i < HOME_SCREEN_BYTES - HOME_SCREEN_WIDTH; i++) {
+        machine.Write_U8(bufferAddr, machine.Read_U8(bufferAddr + HOME_SCREEN_WIDTH));
+        bufferAddr++;
+      }
+      for (int i = 0; i < HOME_SCREEN_WIDTH; i++) {
+        machine.Write_U8(bufferAddr, ' ');
+        bufferAddr++;
+      }
+    }
+
     public static int GetDrawingPoint(ushort coordinate) {
       return (sbyte)(coordinate & 0xFF);
     }

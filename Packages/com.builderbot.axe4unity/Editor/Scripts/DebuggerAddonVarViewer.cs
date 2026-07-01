@@ -34,6 +34,9 @@ namespace Axe4Unity {
       ExpressionViews.Add(new Debugger.ExpressionView() {
         Expr = "theta",
       });
+
+      name = "Var Viewer";
+      titleContent = new GUIContent("Var Viewer");
     }
 
     private void OnDisable() {

@@ -35,6 +35,9 @@ namespace Axe4Unity {
       _screenPreview = CreateBuffer();
       _frontBuffer = CreateBuffer();
       _backBuffer = CreateBuffer();
+
+      name = "Screen Viewer";
+      titleContent = new GUIContent("Screen Viewer");
     }
 
     private void OnDisable() {

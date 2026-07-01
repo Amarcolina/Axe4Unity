@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Profiling;
 using UnityEditor;
-using Unity.Jobs;
-using Unity.Collections;
 
 namespace Axe4Unity {
   using static Constants;
@@ -43,7 +41,7 @@ namespace Axe4Unity {
     private int _stepLevel;
     private bool _anyWatching;
 
-    [MenuItem("Axe/Debugger")]
+    [MenuItem("Axe/Debugger", priority = 0)]
     private static void Init() {
       GetWindow<Debugger>().Show();
     }

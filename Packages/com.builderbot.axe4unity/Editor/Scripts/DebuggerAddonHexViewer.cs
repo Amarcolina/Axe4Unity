@@ -31,6 +31,11 @@ namespace Axe4Unity {
       GetWindow<DebuggerAddonHexViewer>().Show();
     }
 
+    private void OnEnable() {
+      name = "Hex Viewer";
+      titleContent = new GUIContent("Hex Viewer");
+    }
+
     protected override void DrawAddon() {
       if (Address.OnGUI()) {
         Offset = 0;
