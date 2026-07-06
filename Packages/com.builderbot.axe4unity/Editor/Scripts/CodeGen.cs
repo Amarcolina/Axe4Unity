@@ -14,42 +14,93 @@ namespace Axe4Unity {
       string programName = Path.GetFileNameWithoutExtension(asset);
 
       using (var writer = File.CreateText(asset)) {
-        writer.WriteLine("using System;");
-        writer.WriteLine("using UnityEngine;");
-        writer.WriteLine("using Unity.Burst;");
-        writer.WriteLine("using Unity.Collections.LowLevel.Unsafe;");
-        writer.WriteLine("using Axe4Unity;");
-        writer.WriteLine("using Axe4Unity.Op;");
-        writer.WriteLine();
+        int indent = 0;
+        bool startOfLine = true;
 
-        writer.WriteLine("[BurstCompile]");
-        writer.WriteLine($"public class {programName} : NativeRunner {{");
-        writer.WriteLine();
+        void Write(string str) {
+          if (startOfLine) {
+            for (int i = 0; i < indent; i++) {
+              writer.Write(' ');
+              writer.Write(' ');
+            }
+            startOfLine = false;
+          }
+          writer.Write(str);
+        }
 
-        writer.WriteLine("  public override OpAndMetaData Step(Machine machine, int maxSteps) {");
-        writer.WriteLine("    unsafe {");
-        writer.WriteLine("      var statePtr = UnsafeUtility.AddressOf(ref machine.State);");
-        writer.WriteLine("      var lastExecuted = Execute(statePtr, maxSteps);");
-        writer.WriteLine("      int lineIndex = (int)(lastExecuted / 10000);");
-        writer.WriteLine("      int opIndex = (int)(lastExecuted % 10000);");
-        writer.WriteLine("      return machine.Program.Lines[lineIndex].Ops[opIndex];");
-        writer.WriteLine("    }");
-        writer.WriteLine("  }");
-        writer.WriteLine();
+        void WriteLine(string str = null) {
+          if (str != null) {
+            Write(str);
+          }
+          writer.WriteLine();
+          startOfLine = true;
+        }
 
-        writer.WriteLine("  [BurstCompile]");
-        writer.WriteLine("  public static unsafe ulong Execute(void* ptr, int maxSteps) {");
-        writer.WriteLine("    ref MachineStateNative machine = ref UnsafeUtility.AsRef<MachineStateNative>(ptr);");
-        writer.WriteLine("    return Execute(ref machine, maxSteps);");
-        writer.WriteLine("  }");
-        writer.WriteLine();
+        WriteLine("using System;");
+        WriteLine("using UnityEngine;");
+        WriteLine("using Unity.Burst;");
+        WriteLine("using Unity.Collections.LowLevel.Unsafe;");
+        WriteLine("using Axe4Unity;");
+        WriteLine("using Axe4Unity.Op;");
+        WriteLine();
 
-        writer.WriteLine("  public static ulong Execute(ref MachineStateNative machine, int maxSteps) {");
-        writer.WriteLine("    ulong lastExecuted = default;");
-        writer.WriteLine("    while (maxSteps > 0) {");
-        writer.WriteLine("    switch(machine.PC.GetLongCode()) {");
-        writer.WriteLine("      default:");
-        writer.WriteLine("        throw new InvalidOperationException($\"Tried to jump to line {machine.PC.LineIndex} and op {machine.PC.OpIndex} with code {machine.PC.GetLongCode()}\");");
+        WriteLine("[BurstCompile]");
+        WriteLine($"public class {programName} : NativeRunner {{");
+        indent++;
+
+        WriteLine();
+
+        WriteLine("public override Results Step(Machine machine, int maxSteps, int maxGetKeys) {");
+        WriteLine("  unsafe {");
+        WriteLine("    var statePtr = UnsafeUtility.AddressOf(ref machine.State);");
+        WriteLine("    Execute(statePtr, maxSteps, maxGetKeys, out var lastOpIndex, out var stepsCompleted, out var getKeysCompleted);");
+        WriteLine("    int lineIndex = (int)(lastOpIndex / 10000);");
+        WriteLine("    int opIndex = (int)(lastOpIndex % 10000);");
+        WriteLine("    var lastOp = machine.Program.Lines[lineIndex].Ops[opIndex];");
+        WriteLine("    return new Results() {");
+        WriteLine("      LastOpExecuted = lastOp,");
+        WriteLine("      StepsCompleted = stepsCompleted,");
+        WriteLine("      IsGetKeyTimeout = getKeysCompleted >= maxGetKeys,");
+        WriteLine("    };");
+        WriteLine("  }");
+        WriteLine("}");
+        WriteLine();
+
+        WriteLine("[BurstCompile]");
+        WriteLine("public static unsafe void Execute(");
+        WriteLine("  void* ptr,");
+        WriteLine("  int maxSteps,");
+        WriteLine("  int maxGetKey,");
+        WriteLine("  out ulong lastOpIndex,");
+        WriteLine("  out int stepsCompleted,");
+        WriteLine("  out int getKeysCompleted) {");
+        WriteLine("  ref MachineStateNative machine = ref UnsafeUtility.AsRef<MachineStateNative>(ptr);");
+        WriteLine("  Execute(ref machine, maxSteps, maxGetKey, out lastOpIndex, out stepsCompleted, out getKeysCompleted);");
+        WriteLine("}");
+        WriteLine();
+
+        WriteLine("public static void Execute(");
+        WriteLine("  ref MachineStateNative machine,");
+        WriteLine("  int maxSteps,");
+        WriteLine("  int maxGetKeys,");
+        WriteLine("  out ulong lastOpIndex,");
+        WriteLine("  out int stepsCompleted,");
+        WriteLine("  out int getKeysCompleted) {");
+        indent++;
+
+        WriteLine("lastOpIndex = 0;");
+        WriteLine("stepsCompleted = 0;");
+        WriteLine("getKeysCompleted = 0;");
+        WriteLine();
+
+        WriteLine("while (stepsCompleted < maxSteps && getKeysCompleted < maxGetKeys) {");
+        indent++;
+
+        WriteLine("switch(machine.PC.GetLongCode()) {");
+        indent++;
+
+        WriteLine("default:");
+        WriteLine("  throw new InvalidOperationException($\"Tried to jump to line {machine.PC.LineIndex} and op {machine.PC.OpIndex} with code {machine.PC.GetLongCode()}\");");
 
         HashSet<(int line, int op)> jumpLocations = new() {
           (0, 0)
@@ -79,7 +130,7 @@ namespace Axe4Unity {
               jumpLocations.Add((i, j));
             }
 
-            if (op is Op.CallAddr or Op.Text) {
+            if (op is Op.CallAddr or Op.Text or Op.Return) {
               jumpLocations.Add((nextLine, nextOp));
             }
 
@@ -128,15 +179,22 @@ namespace Axe4Unity {
             nextBlockOp = opBlocks[blockI + 1][0].OpIndex;
           }
 
-          writer.WriteLine($"      case {firstLine}_{firstOp:D4}:");
-          writer.WriteLine($"        machine.PC = new ProgramCounter({nextBlockLine}, {nextBlockOp});");
-          writer.WriteLine($"        lastExecuted = {lastLine}_{lastOp:D4};");
-          writer.WriteLine($"        maxSteps -= {block.Count};");
+          WriteLine($"case {firstLine}_{firstOp:D4}:");
+          indent++;
+
+          WriteLine($"machine.PC = new ProgramCounter({nextBlockLine}, {nextBlockOp});");
+          WriteLine($"lastOpIndex = {lastLine}_{lastOp:D4};");
+          WriteLine($"stepsCompleted += {block.Count};");
+
+          int getKeyCount = block.Count(o => o.Op is Op.GetKey);
+          if (getKeyCount != 0) {
+            WriteLine($"getKeysCompleted += {getKeyCount};");
+          }
 
           foreach (var item in block) {
             if (item.LineIndex != prevLine) {
-              writer.WriteLine();
-              writer.WriteLine($"        //{program.Lines[item.LineIndex].Text}");
+              WriteLine();
+              WriteLine($"//{program.Lines[item.LineIndex].Text}");
             }
 
             List<(string name, object val)> args = new();
@@ -147,26 +205,39 @@ namespace Axe4Unity {
               args.Add((prop.Name, prop.GetValue(item.Op)));
             }
 
-            writer.Write($"        new {ToNaturalString(item.Op.GetType())}() {{ ");
-            writer.Write(string.Join(", ", args.Select(a => $"{a.name} = {ToValueString(a.val)}")));
-            writer.Write(" }.Execute(ref machine);");
-            writer.WriteLine();
+            Write($"new {ToNaturalString(item.Op.GetType())}()");
+            if (args.Count != 0) {
+              Write(" { ");
+              Write(string.Join(", ", args.Select(a => $"{a.name} = {ToValueString(a.val)}")));
+              Write(" }");
+            }
+            Write(".Execute(ref machine);");
+            WriteLine();
 
             prevLine = item.LineIndex;
           }
 
           if (block[block.Count - 1].Op is IOpLoopExit loopExit && loopExit.ShouldExit) {
-            writer.WriteLine($"        return lastExecuted;");
+            WriteLine($"return;");
           } else {
-            writer.WriteLine($"        break;");
+            WriteLine($"break;");
           }
+
+          indent--;
         }
 
-        writer.WriteLine("    }");
-        writer.WriteLine("    }");
-        writer.WriteLine("  return lastExecuted;");
-        writer.WriteLine("  }");
-        writer.WriteLine("}");
+        indent--; //switch
+        WriteLine("}");
+
+        indent--; //while
+        WriteLine("}");
+        WriteLine("return;");
+
+        indent--; //method
+        WriteLine("}");
+
+        indent--; //class
+        WriteLine("}");
       }
     }
 

@@ -377,6 +377,10 @@ PrefabInstance:
       value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 1518577579370267955, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
+      propertyPath: MaxOpsPerFrame
+      value: 1000000
+      objectReference: {fileID: 0}
+    - target: {fileID: 1518577579370267955, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
       propertyPath: AppVars.Array.size
       value: 0
       objectReference: {fileID: 0}

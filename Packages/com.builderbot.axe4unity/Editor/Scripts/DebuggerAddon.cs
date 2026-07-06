@@ -13,7 +13,8 @@ namespace Axe4Unity {
         return;
       }
 
-      if (Debugger.Instance.Machine == null) {
+      if (Debugger.Instance.Machine == null ||
+          !Debugger.Instance.Machine.IsCreated) {
         EditorGUILayout.HelpBox("Waiting for machine to start...", MessageType.Info);
         return;
       }

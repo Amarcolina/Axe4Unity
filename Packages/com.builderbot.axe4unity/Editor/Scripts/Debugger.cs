@@ -62,6 +62,9 @@ namespace Axe4Unity {
     private void OnGUI() {
       Profiler.BeginSample("Axe.Debugger");
       Runner = FindAnyObjectByType<AxeRunner>(FindObjectsInactive.Exclude);
+      if (Runner == null) {
+        return;
+      }
 
       _anyWatching = DebuggerAddonVarViewer.All.
                      SelectMany(v => v.ExpressionViews).
@@ -69,18 +72,6 @@ namespace Axe4Unity {
 
       Machine = Runner.Machine;
       Program = Runner.Program.Program;
-
-      if (Application.isPlaying) {
-        if (Runner != _subscribedRunner) {
-          if (_subscribedRunner != null) {
-            _subscribedRunner.OnStepExecution -= OnStepExecution;
-          }
-          _subscribedRunner = Runner;
-          if (_subscribedRunner != null) {
-            _subscribedRunner.OnStepExecution += OnStepExecution;
-          }
-        }
-      }
 
       Rect controlRect = new Rect(0, 0, position.width, CONTROL_BAR_HEIGHT);
       Rect programViewRect = new Rect(0, CONTROL_BAR_HEIGHT, position.width, position.height - CONTROL_BAR_HEIGHT);
@@ -92,6 +83,30 @@ namespace Axe4Unity {
       Profiler.BeginSample("DoProgramView");
       DoProgramView(programViewRect);
       Profiler.EndSample();
+
+      bool shouldBeSubscribed = false;
+      if (Breakpoints.Count != 0) {
+        shouldBeSubscribed = true;
+      }
+      if (_anyWatching) {
+        shouldBeSubscribed = true;
+      }
+      if (PauseCondition != PauseOn.None) {
+        shouldBeSubscribed = true;
+      }
+
+      if (Application.isPlaying) {
+        var runnerToSubscribe = shouldBeSubscribed ? Runner : null;
+        if (runnerToSubscribe != _subscribedRunner) {
+          if (_subscribedRunner != null) {
+            _subscribedRunner.OnStepExecution -= OnStepExecution;
+          }
+          _subscribedRunner = runnerToSubscribe;
+          if (_subscribedRunner != null) {
+            _subscribedRunner.OnStepExecution += OnStepExecution;
+          }
+        }
+      }
 
       Repaint();
       Profiler.EndSample();
@@ -169,7 +184,7 @@ namespace Axe4Unity {
           GUILayout.Label("", EditorStyles.toolbar, GUILayout.ExpandWidth(true));
 
           if (GUILayout.Button("Restart", EditorStyles.toolbarButton, GUILayout.ExpandWidth(false))) {
-            Runner.Machine.Reset();
+            Runner.ResetMachine();
           }
 
           GUILayout.Space(50);

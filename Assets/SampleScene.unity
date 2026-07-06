@@ -119,6 +119,52 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &212878735 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7639334103058008323, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
+  m_PrefabInstance: {fileID: 1720302553}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &212878736 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6044494911366066962, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
+  m_PrefabInstance: {fileID: 1720302553}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 212878735}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0770e9814fce0c248952ee02848fcdc4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Axe4Unity::Axe4Unity.AxeKeyboardControl
+--- !u!114 &212878737 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1518577579370267955, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
+  m_PrefabInstance: {fileID: 1720302553}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 212878735}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c9d4aff72e4319428440e4e47bae58b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Axe::AxeRunner
+--- !u!114 &212878739
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 212878735}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4980a94e17174b4a8e3fa19fe4cf437, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Axe4Unity::Axe4Unity.AxeSpeedRunController
+  Runner: {fileID: 212878737}
+  Controls: {fileID: 212878736}
+  Recording: {fileID: 11400000, guid: 338428df1e3796344949803d9af72c17, type: 2}
+  StartingState: {fileID: 11400000, guid: 93597270c187ebd4dbd369e47b845999, type: 2}
+  Record: 0
+  PlaybackFPS: 60
+  Restart: 0
 --- !u!1001 &291807784
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -444,7 +490,19 @@ PrefabInstance:
     - target: {fileID: 1518577579370267955, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
       propertyPath: Program
       value: 
-      objectReference: {fileID: -2686810026668816932, guid: 2084b52f4e63d3e4ab6778083923a415, type: 3}
+      objectReference: {fileID: -2686810026668816932, guid: 81bcb166b03a9cf48bfe508c7f31b0dd, type: 3}
+    - target: {fileID: 1518577579370267955, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
+      propertyPath: AppVars.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1518577579370267955, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
+      propertyPath: AppVars.Array.data[0].AppVar
+      value: 
+      objectReference: {fileID: -2686810026668816932, guid: def3e9092321cd8449ced53977ffe746, type: 3}
+    - target: {fileID: 1518577579370267955, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
+      propertyPath: AppVars.Array.data[1].AppVar
+      value: 
+      objectReference: {fileID: 7239065423396753691, guid: 2d150f091becc7e49b184375822bdabc, type: 3}
     - target: {fileID: 7639334103058008323, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
       propertyPath: m_Name
       value: AxeRunner
@@ -452,7 +510,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7639334103058008323, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 212878739}
   m_SourcePrefab: {fileID: 100100000, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

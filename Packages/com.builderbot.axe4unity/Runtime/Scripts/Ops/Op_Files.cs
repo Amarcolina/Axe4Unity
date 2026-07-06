@@ -90,6 +90,7 @@ namespace Axe4Unity.Op {
       if (index < 0) {
         Debug.Log($"Could not find file {name} on system");
         machine.HL = 0;
+        return;
       }
 
       var file = machine.FileMetadata[index];

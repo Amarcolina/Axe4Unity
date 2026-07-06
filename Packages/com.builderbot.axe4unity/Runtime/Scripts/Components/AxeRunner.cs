@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Profiling;
 
 namespace Axe4Unity {
 
@@ -72,6 +73,8 @@ namespace Axe4Unity {
     [Tooltip("If non-zero, will force that key to be pressed every frame.")]
     public int LockedKey;
 
+    public bool WaitForKey;
+
     private Machine _machine;
     public Machine Machine => _machine;
 
@@ -79,8 +82,8 @@ namespace Axe4Unity {
     private bool _waitForAnyKey;
     private float _delayStart;
 
-    public void LoadFiles() {
-      _machine.ResetAllFiles();
+    public void ResetMachine() {
+      _machine.Reset();
 
       foreach (var entry in AppVars) {
         if (entry.Archive) {
@@ -94,11 +97,125 @@ namespace Axe4Unity {
       }
     }
 
+    public void UpdateKeyControls(out int anyKey) {
+      anyKey = 0;
+      foreach ((var code, var controls) in Controls.Map) {
+        bool isPressed = false;
+        foreach (var control in controls) {
+          if (control.isPressed) {
+            isPressed = true;
+            anyKey = code;
+            break;
+          }
+        }
+
+        if (Controls.CalcKeyboard != null &&
+            Controls.CalcKeyboard.CodeToButton.TryGetValue(code, out var button) &&
+            button.IsPressed) {
+          isPressed = true;
+        }
+
+        _machine.SetKeyIsPressed(code, isPressed);
+      }
+
+      if (LockedKey != 0) {
+        _machine.SetKeyIsPressed(LockedKey, true);
+      }
+    }
+
+    public SimulateResults SimulateFrame() {
+      int getKeyCount = 0;
+
+      SimulateResults simResults = new();
+
+      int opsLeft = MaxOpsPerFrame;
+      while (true) {
+        try {
+          if (NativeRunner != null && NativeRunner.enabled) {
+            NativeRunner.Results results;
+            Profiler.BeginSample("AxeRunner.NativeExecution");
+            results = NativeRunner.Step(Machine, MaxOpsPerFrame, GetKeySkipCount);
+            Profiler.EndSample();
+
+            simResults.LastExecuted = results.LastOpExecuted;
+            opsLeft -= results.StepsCompleted;
+            if (results.IsGetKeyTimeout) {
+              simResults.WaitForNextUnityFrame = true;
+              break;
+            }
+          } else {
+            simResults.LastExecuted = Machine.Step();
+          }
+          if (simResults.LastExecuted == null) {
+            Running = false;
+            simResults.WaitForNextUnityFrame = true;
+            return simResults;
+          }
+        } catch (Exception e) {
+          Running = false;
+          simResults.IsError = true;
+          Debug.LogException(e);
+          return simResults;
+        }
+
+        if (OnStepExecution != null) {
+          Profiler.BeginSample("AxeRunner.OnStepCallback");
+          OnStepExecution.Invoke(simResults.LastExecuted);
+          Profiler.EndSample();
+        }
+
+        opsLeft--;
+        if (opsLeft <= 0) {
+          simResults.WaitForNextUnityFrame = true;
+          Debug.LogWarning("Program exceeded max operations per frame");
+          break;
+        }
+
+        if (simResults.LastExecuted.Op is Op.GetKey getKey && getKey.RMode == 1) {
+          _waitForAnyKey = true;
+          simResults.WaitForNextUnityFrame = true;
+          break;
+        }
+
+        if (simResults.LastExecuted.Op is Op.DispGraph dispGraph) {
+          simResults.DidDisplay = true;
+          simResults.DisplayMode = dispGraph.RMode;
+          break;
+        }
+
+        if (simResults.LastExecuted.Op is Op.ClrHome or Op.Disp or Op.Output ||
+            (simResults.LastExecuted.Op is Op.Text && !_machine.State.TextToBuffer)) {
+          simResults.DidDisplay = true;
+          simResults.DisplayMode = 0;
+          break;
+        }
+
+        if (simResults.LastExecuted.Op is Op.Pause) {
+          if (_machine.State.IsFullSpeed) {
+            simResults.PauseTime = _machine.State.HL / 4500f;
+          } else {
+            simResults.PauseTime = _machine.State.HL / 1800f;
+          }
+          break;
+        }
+
+        if (simResults.LastExecuted.Op is Op.GetKey) {
+          getKeyCount++;
+          if (getKeyCount > GetKeySkipCount) {
+            simResults.WaitForNextUnityFrame = true;
+            break;
+          }
+        }
+      }
+
+      return simResults;
+    }
+
     private void OnEnable() {
       _machine = new(Program.Program, LargeFont, SmallFont);
       _delayStart = DelayStart;
 
-      LoadFiles();
+      ResetMachine();
 
       if (Screen != null) {
         Screen.UpdateScreen(this, 0);
@@ -119,40 +236,17 @@ namespace Axe4Unity {
         return;
       }
 
-      int anykey = 0;
-      foreach ((var code, var controls) in Controls.Map) {
-        bool isPressed = false;
-        foreach (var control in controls) {
-          if (control.isPressed) {
-            isPressed = true;
-            anykey = code;
-            break;
-          }
-        }
-
-        if (Controls.CalcKeyboard != null &&
-            Controls.CalcKeyboard.CodeToButton.TryGetValue(code, out var button) &&
-            button.IsPressed) {
-          isPressed = true;
-        }
-
-        _machine.SetKeyIsPressed(code, isPressed);
-      }
-
-      if (LockedKey != 0) {
-        _machine.SetKeyIsPressed(LockedKey, true);
-      }
+      UpdateKeyControls(out var anyKey);
 
       if (_waitForAnyKey) {
-        if (anykey == 0) {
+        if (anyKey == 0) {
           return;
         }
         _waitForAnyKey = false;
-        _machine.State.HL = (ushort)anykey;
+        _machine.State.HL = (ushort)anyKey;
       }
 
-      bool didDisplay = false;
-      int displayRMode = 0;
+      SimulateResults simResults = default;
 
       float startTime = Time.realtimeSinceStartup;
       _frameResidual -= Time.deltaTime * SimulationScale;
@@ -164,91 +258,21 @@ namespace Axe4Unity {
           break;
         }
 
-        int getKeyCount = 0;
-        var stopSimulatingThisFrame = false;
+        simResults = SimulateFrame();
 
-        int opsLeft = MaxOpsPerFrame;
-        while (Running) {
-          OpAndMetaData executed;
-          try {
-            if (NativeRunner != null && NativeRunner.enabled) {
-              executed = NativeRunner.Step(Machine, MaxOpsPerFrame);
-            } else {
-              executed = Machine.Step();
-            }
-            if (executed == null) {
-              Running = false;
-              stopSimulatingThisFrame = true;
-              break;
-            }
-          } catch (Exception e) {
-            Running = false;
-            Debug.LogException(e);
-            return;
-          }
-
-          if (OnStepExecution != null) {
-            UnityEngine.Profiling.Profiler.BeginSample("OnStepCallback");
-            OnStepExecution.Invoke(executed);
-            UnityEngine.Profiling.Profiler.EndSample();
-          }
-
-          opsLeft--;
-          if (opsLeft <= 0) {
-            _frameResidual = 1f / TargetFPS;
-            stopSimulatingThisFrame = true;
-            Debug.LogWarning("Program exceeded max operations per frame");
-            break;
-          }
-
-          if (executed.Op is Op.GetKey getKey && getKey.RMode == 1) {
-            _frameResidual = 1f / TargetFPS;
-            _waitForAnyKey = true;
-            stopSimulatingThisFrame = true;
-            break;
-          }
-
-          if (executed.Op is Op.DispGraph dispGraph) {
-            _frameResidual += 1f / TargetFPS;
-            didDisplay = true;
-            displayRMode = dispGraph.RMode;
-            break;
-          }
-
-          if (executed.Op is Op.ClrHome or Op.Disp or Op.Output ||
-              (executed.Op is Op.Text && !_machine.State.TextToBuffer)) {
-            _frameResidual += 1f / TargetFPS;
-            didDisplay = true;
-            displayRMode = 0;
-          }
-
-          if (executed.Op is Op.Pause) {
-            if (_machine.State.IsFullSpeed) {
-              _frameResidual += _machine.State.HL / 4500f;
-            } else {
-              _frameResidual += _machine.State.HL / 1800f;
-            }
-            break;
-          }
-
-          if (executed.Op is Op.GetKey) {
-            getKeyCount++;
-            if (getKeyCount > GetKeySkipCount) {
-              _frameResidual = 1f / TargetFPS;
-              stopSimulatingThisFrame = true;
-              break;
-            }
-          }
-        }
-
-        if (stopSimulatingThisFrame) {
+        if (simResults.IsError || simResults.WaitForNextUnityFrame) {
+          _frameResidual = 1f / TargetFPS;
           break;
+        } else if (simResults.PauseTime != 0) {
+          _frameResidual += simResults.PauseTime;
+        } else {
+          _frameResidual += 1f / TargetFPS;
         }
       }
 
       if (!Running && Machine.State.CallStackTop == 0) {
-        didDisplay = true;
-        displayRMode = 0;
+        simResults.DidDisplay = true;
+        simResults.DisplayMode = 0;
 
         var screenBuffer = Machine.State.GetBuffer(Machine.ADDR_SCREEN_FRONT, Constants.SCREEN_BYTES);
         for (int i = 0; i < screenBuffer.Length; i++) {
@@ -256,8 +280,8 @@ namespace Axe4Unity {
         }
       }
 
-      if (didDisplay && Screen != null) {
-        Screen.UpdateScreen(this, displayRMode);
+      if (simResults.DidDisplay && Screen != null) {
+        Screen.UpdateScreen(this, simResults.DisplayMode);
       }
     }
 
@@ -265,6 +289,19 @@ namespace Axe4Unity {
     public struct AppVarEntry {
       public DataAsset AppVar;
       public bool Archive;
+    }
+
+    [Serializable]
+    public struct SimulateResults {
+
+      public bool IsError;
+      public bool WaitForNextUnityFrame;
+      public OpAndMetaData LastExecuted;
+
+      public bool DidDisplay;
+      public int DisplayMode;
+
+      public float PauseTime;
     }
   }
 }

@@ -33,6 +33,8 @@ namespace Axe4Unity {
     public NativeArray<bool> PressedKeys;
     public int LastKeyPressed;
 
+    public bool IsCreated => Memory.IsCreated;
+
     public Unity.Mathematics.Random Random {
       get {
         uint state = (uint)(Read_U16(Machine.ADDR_RANDOM_STATE) + Read_U16(Machine.ADDR_RANDOM_STATE + 2) << 16);
@@ -124,7 +126,7 @@ namespace Axe4Unity {
     }
 
     public void Dispose() {
-      ResetAllFiles();
+      DisposeFiles();
 
       if (ArchiveFiles.IsCreated) ArchiveFiles.Dispose();
       if (FileMetadata.IsCreated) FileMetadata.Dispose();
@@ -140,7 +142,7 @@ namespace Axe4Unity {
       if (PressedKeys.IsCreated) PressedKeys.Dispose();
     }
 
-    public void ResetAllFiles() {
+    public void DisposeFiles() {
       if (ArchiveFiles.IsCreated) {
         foreach (KVPair<FixedString32Bytes, UnsafeList<byte>> pair in ArchiveFiles) {
           pair.Value.Dispose();
@@ -156,8 +158,7 @@ namespace Axe4Unity {
       CallStackTop = 0;
       ArgStackTop = 0;
 
-      FileMetadata.Clear();
-      MountedFiles.Clear();
+      DisposeFiles();
 
       for (int i = 0; i < Memory.Length; i++) {
         Memory[i] = 255;

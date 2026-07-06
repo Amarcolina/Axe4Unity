@@ -6,7 +6,7 @@ using UnityEditor.AssetImporters;
 
 namespace Axe4Unity {
 
-  [ScriptedImporter(2, new string[] { ".8xp", ".8Xp", ".8XP", ".axe" })]
+  [ScriptedImporter(3, new string[] { ".8xp", ".8Xp", ".8XP", ".axe" })]
   public class ProgramScriptedImporter : ScriptedImporter {
 
     [Tooltip("Should the program attempt import even if it is marked as a sub-program.")]

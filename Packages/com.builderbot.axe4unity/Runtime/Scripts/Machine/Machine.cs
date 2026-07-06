@@ -158,6 +158,8 @@ namespace Axe4Unity {
 
     public MachineStateNative State;
 
+    public bool IsCreated => State.IsCreated;
+
     [NonSerialized]
     public Program Program;
 
@@ -208,10 +210,6 @@ namespace Axe4Unity {
 
     public void Reset() {
       State.Reset(this);
-    }
-
-    public void ResetAllFiles() {
-      State.ResetAllFiles();
     }
 
     public void AddToArchive(string name, List<byte> data) {

@@ -30,6 +30,14 @@ namespace Axe4Unity {
     }
 
     [Test]
+    public void TestGettingMissingFileReturnsZero() {
+      Execute("GetCalc(\"FOO\")->A");
+
+      Assert.That(U16("A"), Is.Zero);
+      Assert.That(Machine.State.FileMetadata.Length, Is.Zero);
+    }
+
+    [Test]
     public void TestCanDeleteFile() {
       Execute("GetCalc(\"FOO\", 10)",
               "DelVar \"FOO\"");

@@ -239,9 +239,18 @@ namespace Axe4Unity {
         });
         return true;
       } else if (t.IsLetter || t.IsCallingArg) {
-        Emit(new Op.ReadAddress() {
-          VarAddress = GetVarAddress(ReadName())
-        });
+        var name = ReadName();
+        if (I < Tokens.Count && Tokens[I] == "(") {
+          I++;
+          Emit(new Op.Call() {
+            ArgCount = EmitArguments(),
+            LabelAddress = GetLabelLine(name)
+          });
+        } else {
+          Emit(new Op.ReadAddress() {
+            VarAddress = GetVarAddress(name)
+          });
+        }
         return true;
       } else if (t.IsLMemory || t.IsStaticVar) {
         Emit(new Op.Const() {
@@ -359,18 +368,6 @@ namespace Axe4Unity {
             Emit(new Op.CallAddr() {
               ArgCount = EmitArguments()
             }); ;
-            break;
-          } else if (CurrentLine.Count != 0 &&
-                     CurrentLine[CurrentLine.Count - 1].Op is Op.ReadAddress) {
-            string labelName = CurrentLine[CurrentLine.Count - 1].Display;
-            CurrentLine.RemoveAt(CurrentLine.Count - 1);
-
-            I++;
-
-            Emit(new Op.Call() {
-              ArgCount = EmitArguments(),
-              LabelAddress = GetLabelLine(labelName)
-            });
             break;
           } else {
             I++;
@@ -1355,8 +1352,10 @@ namespace Axe4Unity {
         return (ushort)addr;
       } else if (Context != null && Context.TryGetVarAddress(name, out addr)) {
         return (ushort)addr;
-      } else {
+      } else if (Pass == 0) {
         return 0xDEAD;
+      } else {
+        throw new InvalidOperationException($"Undefined variable name [{name}]");
       }
     }
 
@@ -1364,8 +1363,10 @@ namespace Axe4Unity {
       int line;
       if (Program.TryGetLabelLine(name, out line)) {
         return line;
+      } else if (Pass == 0) {
+        return 0xFACE;
       } else {
-        return 45678;
+        throw new InvalidOperationException($"Undefined label name [{name}]");
       }
     }
 

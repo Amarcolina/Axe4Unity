@@ -54,8 +54,7 @@ public class AppControls : MonoBehaviour {
   }
 
   public void RestartProgram() {
-    _currEntry.Runner.Machine.Reset();
-    _currEntry.Runner.LoadFiles();
+    _currEntry.Runner.ResetMachine();
     _currEntry.Runner.Running = true;
   }
 
