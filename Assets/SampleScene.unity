@@ -165,6 +165,18 @@ MonoBehaviour:
   Record: 0
   PlaybackFPS: 60
   Restart: 0
+--- !u!114 &212878742
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 212878735}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfd3270a33de56a438a05c02cd150a62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::APORTAL_NativeRunner
 --- !u!1001 &291807784
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -435,6 +447,60 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1458342976
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1458342978}
+  - component: {fileID: 1458342977}
+  m_Layer: 0
+  m_Name: PortalAutoSolve
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1458342977
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1458342976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 941d5e354b8e1a1468aa9529a56615a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PortalAutoSolve
+  Runner: {fileID: 212878737}
+  StartState: {fileID: 11400000, guid: f616c983087961f488acc327c505fb79, type: 2}
+  MoveFrames: 8
+  Exploration: 1.4
+  LineOnFrame: 460
+  LineOnWin: 367
+  DoInit: 0
+  DoStep: 0
+  StepCount: 0
+  TotalNodes: 0
+--- !u!4 &1458342978
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1458342976}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1720302553
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -492,6 +558,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: -2686810026668816932, guid: 81bcb166b03a9cf48bfe508c7f31b0dd, type: 3}
     - target: {fileID: 1518577579370267955, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
+      propertyPath: NativeRunner
+      value: 
+      objectReference: {fileID: 212878742}
+    - target: {fileID: 1518577579370267955, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
       propertyPath: AppVars.Array.size
       value: 2
       objectReference: {fileID: 0}
@@ -514,6 +584,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7639334103058008323, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
       insertIndex: -1
       addedObject: {fileID: 212878739}
+    - targetCorrespondingSourceObject: {fileID: 7639334103058008323, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 212878742}
   m_SourcePrefab: {fileID: 100100000, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
@@ -523,3 +596,4 @@ SceneRoots:
   - {fileID: 612846072}
   - {fileID: 1720302553}
   - {fileID: 291807784}
+  - {fileID: 1458342978}
