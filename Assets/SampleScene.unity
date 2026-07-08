@@ -172,7 +172,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 212878735}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bfd3270a33de56a438a05c02cd150a62, type: 3}
   m_Name: 
@@ -463,7 +463,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1458342977
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -604,6 +604,67 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 212878742}
   m_SourcePrefab: {fileID: 100100000, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
+--- !u!1 &2049983527
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2049983529}
+  - component: {fileID: 2049983528}
+  m_Layer: 0
+  m_Name: SpeedrunOptimize
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2049983528
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2049983527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccc999973e1230843bfd59e8e43f12ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Axe4Unity::Axe4Unity.AxeSpeedRunOptimizer
+  Runner: {fileID: 212878737}
+  StartingState: {fileID: 11400000, guid: 2195a7262847ea448ab710aa77f72b38, type: 2}
+  InputRecording: {fileID: 11400000, guid: 81dc40ab0e93c774e9aba33ebebaa096, type: 2}
+  OutputRecording: {fileID: 11400000, guid: 4a351af6053a78e4a84222aa016ec11d, type: 2}
+  ExtraRightFrames: 16
+  WinLine: 367
+  ContinueLine: 460
+  MaxFrameMS: 60
+  SimulationCount: 100000
+  MaxFrameLoss: 4
+  ResetLossThreshold: 100
+  SchedulePower: 3
+  Progress: 0
+  SimulationProgress: 0
+  StartCost: 0
+  CurrCost: 0
+  BestCost: 0
+--- !u!4 &2049983529
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2049983527}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -613,3 +674,4 @@ SceneRoots:
   - {fileID: 1720302553}
   - {fileID: 291807784}
   - {fileID: 1458342978}
+  - {fileID: 2049983529}

@@ -129,7 +129,7 @@ namespace Axe4Unity {
       SimulateResults simResults = new();
 
       int opsLeft = MaxOpsPerFrame;
-      while (Running) {
+      while (true) {
         try {
           if (NativeRunner != null && NativeRunner.enabled) {
             NativeRunner.Results results;

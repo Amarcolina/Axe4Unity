@@ -69,9 +69,8 @@ namespace Axe4Unity {
         while (_frameResidual < 0 && _currFrame < Recording.Frames.Count) {
           _frameResidual += 1f / PlaybackFPS;
           for (int i = 0; i < Runner.Machine.State.PressedKeys.Length; i++) {
-            Runner.Machine.State.PressedKeys[i] = false;
+            Runner.Machine.SetKeyIsPressed(i, i == Recording.Frames[_currFrame]);
           }
-          Runner.Machine.State.PressedKeys[Recording.Frames[_currFrame]] = true;
           SimulateFrame();
 
           _currFrame++;
