@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 using System.Collections.Generic;
 using Axe4Unity;
 
@@ -8,7 +9,9 @@ public class PortalAutoSolve : MonoBehaviour {
   public MachineStateAsset StartState;
   public AxeSpeedRunRecording Recording;
   public int MoveFrames;
-  public float Exploration;
+  public float ExplorationWeight;
+  public float RightPressureWeight;
+  public float BucketTermWeight;
 
   [Header("Game Constants")]
   public int LineOnFrame;
@@ -17,9 +20,11 @@ public class PortalAutoSolve : MonoBehaviour {
   [Header("Runtime")]
   public bool DoInit;
   public bool DoStep;
+  public bool FoundTerminalState;
   public int StepCount;
   public int TotalNodes;
 
+  [SerializeField]
   private Node RootNode;
 
   private EdgeDef[] EdgeDefs;
@@ -30,6 +35,8 @@ public class PortalAutoSolve : MonoBehaviour {
 
   private bool[,] _visited;
 
+  private Dictionary<BucketState, int> _bucketCounts;
+
   private void Update() {
     if (DoInit) {
       BeginMCTS();
@@ -39,6 +46,9 @@ public class PortalAutoSolve : MonoBehaviour {
     if (DoStep) {
       DoStep = false;
       for (int i = 0; i < StepCount; i++) {
+        if (FoundTerminalState) {
+          break;
+        }
         StepMCTS();
       }
     }
@@ -64,12 +74,24 @@ public class PortalAutoSolve : MonoBehaviour {
       new EdgeDef(){ Move = Move.Portal7, Frames = 1 },
     };
 
-    _visited = new bool[18, 12];
+    _bucketCounts = new();
 
     RootNode = new Node();
 
     _playerXAddr = Runner.Machine.AddressOfName("X");
     _playerYAddr = Runner.Machine.AddressOfName("Y");
+
+    StartState.State.CopyTo(Runner.Machine.State);
+
+    byte playerX = (byte)(Runner.Machine.State.Read_U16(_playerXAddr) / 256);
+    byte playerY = (byte)(Runner.Machine.State.Read_U16(_playerYAddr) / 256);
+
+    var bucketState = new BucketState() {
+      PlayerX = playerX,
+      PlayerY = playerY
+    };
+
+    _bucketCounts[bucketState] = 1_000_000;
   }
 
   public void StepMCTS() {
@@ -80,22 +102,24 @@ public class PortalAutoSolve : MonoBehaviour {
   }
 
   public float GetNodeScore(Node node) {
-    float explorationTerm = Exploration * Mathf.Sqrt(Mathf.Log(node.DescendantCount) / node.Parent.DescendantCount);
-    float rightPressureTerm = node.PlayerXScore / (18 * 256);
+    float explorationTerm = ExplorationWeight * Mathf.Sqrt(Mathf.Log(node.Parent.DescendantCount) / node.DescendantCount);
+    float rightPressureTerm = RightPressureWeight * node.PlayerXScore / (18f * 256f);
+    float bucketTerm = BucketTermWeight / node.VisitedCount;
 
-    return explorationTerm + rightPressureTerm;
+    return explorationTerm + rightPressureTerm + bucketTerm;
   }
 
   public ExpandResults ExpandTree(Node node) {
     ExpandResults results;
 
-    if (node.Children == null) {
+    if (node.Children == null || node.Children.Length == 0) {
       node.Children = new Node[EdgeDefs.Length];
       for (int i = 0; i < node.Children.Length; i++) {
         node.Children[i] = new Node() {
           Parent = node,
           EdgeMove = EdgeDefs[i].Move,
           EdgeFrames = EdgeDefs[i].Frames,
+          DescendantCount = 1
         };
       }
 
@@ -106,42 +130,58 @@ public class PortalAutoSolve : MonoBehaviour {
       TmpState.CopyFrom(Runner.Machine.State);
       foreach (var child in node.Children) {
         TmpState.CopyTo(Runner.Machine.State);
+
+        byte playerXBefore = (byte)(Runner.Machine.State.Read_U16(_playerXAddr) / 256);
+        byte playerYBefore = (byte)(Runner.Machine.State.Read_U16(_playerYAddr) / 256);
+
         SimulateEdge(child);
 
         child.PlayerXScore = Runner.Machine.State.Read_U16(_playerXAddr);
 
+        byte playerXAfter = (byte)(Runner.Machine.State.Read_U16(_playerXAddr) / 256);
+        byte playerYAfter = (byte)(Runner.Machine.State.Read_U16(_playerYAddr) / 256);
+
+        var bucketState = new BucketState() {
+          PlayerX = playerXAfter,
+          PlayerY = playerYAfter
+        };
+        if (!_bucketCounts.TryGetValue(bucketState, out var count)) {
+          count = 1;
+        }
+
+        if (playerXBefore != playerXAfter ||
+            playerYBefore != playerYAfter) {
+          count++;
+        }
+
+        _bucketCounts[bucketState] = count;
+
+        child.VisitedCount = count;
+
         if (Runner.Machine.State.PC.LineIndex == LineOnWin) {
           Debug.Log("Found winning state");
+          FoundTerminalState = true;
           child.IsWin = true;
         } else if (Runner.Machine.State.PC.LineIndex != LineOnFrame) {
           Debug.Log("Found losing state");
+          FoundTerminalState = true;
           child.IsLoss = true;
         }
       }
     } else {
-      float totalWeight = 0;
+      float bestScore = 0;
+      Node bestNode = null;
       foreach (var child in node.Children) {
-        if (child.IsTerminal) continue;
-
-        totalWeight += GetNodeScore(child);
-      }
-
-      float r = Random.value * totalWeight;
-      Node chosenChild = node.Children[0];
-      foreach (var child in node.Children) {
-        if (child.IsTerminal) continue;
-
         float score = GetNodeScore(child);
-        if (r < GetNodeScore(child)) {
-          chosenChild = child;
-          break;
+        if (score > bestScore) {
+          bestScore = score;
+          bestNode = child;
         }
-        r -= score;
       }
 
-      for (int i = 0; i < chosenChild.EdgeFrames; i++) {
+      for (int i = 0; i < bestNode.EdgeFrames; i++) {
         int key = 0;
-        switch (node.EdgeMove) {
+        switch (bestNode.EdgeMove) {
           case Move.Left:
             key = 2;
             break;
@@ -177,15 +217,17 @@ public class PortalAutoSolve : MonoBehaviour {
         Recording.Frames.Add(key);
       }
 
-      SimulateEdge(chosenChild);
-      results = ExpandTree(chosenChild);
+      SimulateEdge(bestNode);
+      results = ExpandTree(bestNode);
     }
 
     node.DescendantCount += results.NodesAdded;
 
     node.PlayerXScore = 0;
+    node.VisitedCount = int.MaxValue;
     foreach (var child in node.Children) {
       node.PlayerXScore = Mathf.Max(node.PlayerXScore, child.PlayerXScore);
+      node.VisitedCount = Mathf.Min(node.VisitedCount, child.VisitedCount);
     }
 
     return results;
@@ -237,17 +279,22 @@ public class PortalAutoSolve : MonoBehaviour {
     }
   }
 
+  [System.Serializable]
   public class Node {
     //Edge
     public Move EdgeMove;
     public int EdgeFrames;
 
+    [System.NonSerialized]
     public Node Parent;
+    [System.NonSerialized]
+    //[SerializeReference]
     public Node[] Children = null;
     public int DescendantCount;
 
     //Scoring
     public int PlayerXScore;
+    public int VisitedCount;
 
     public bool IsWin;
     public bool IsLoss;
@@ -278,6 +325,28 @@ public class PortalAutoSolve : MonoBehaviour {
 
   public struct ExpandResults {
     public int NodesAdded;
+  }
+
+  public struct BucketState : IEquatable<BucketState> {
+    public byte PlayerX;
+    public byte PlayerY;
+
+    public bool Equals(BucketState other) {
+      return PlayerX == other.PlayerX &&
+             PlayerY == other.PlayerY;
+    }
+
+    public override bool Equals(object obj) {
+      if (obj is BucketState other) {
+        return Equals(other);
+      } else {
+        return false;
+      }
+    }
+
+    public override int GetHashCode() {
+      return PlayerX.GetHashCode() ^ PlayerY.GetHashCode();
+    }
   }
 
 }

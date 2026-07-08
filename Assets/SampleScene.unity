@@ -478,14 +478,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PortalAutoSolve
   Runner: {fileID: 212878737}
   StartState: {fileID: 11400000, guid: f616c983087961f488acc327c505fb79, type: 2}
+  Recording: {fileID: 11400000, guid: 1c457ad48dcfc7544b68dcf3ee4f8d30, type: 2}
   MoveFrames: 8
-  Exploration: 1.4
+  ExplorationWeight: 0.1
+  RightPressureWeight: 0
+  BucketTermWeight: 1
   LineOnFrame: 460
   LineOnWin: 367
   DoInit: 0
   DoStep: 0
-  StepCount: 0
+  FoundTerminalState: 0
+  StepCount: 10
   TotalNodes: 0
+  RootNode:
+    EdgeMove: 0
+    EdgeFrames: 0
+    DescendantCount: 0
+    PlayerXScore: 0
+    VisitedCount: 0
+    IsWin: 0
+    IsLoss: 0
 --- !u!4 &1458342978
 Transform:
   m_ObjectHideFlags: 0
@@ -557,6 +569,10 @@ PrefabInstance:
       propertyPath: Program
       value: 
       objectReference: {fileID: -2686810026668816932, guid: 81bcb166b03a9cf48bfe508c7f31b0dd, type: 3}
+    - target: {fileID: 1518577579370267955, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
+      propertyPath: Running
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1518577579370267955, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
       propertyPath: NativeRunner
       value: 
