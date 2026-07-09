@@ -16,8 +16,13 @@ namespace Axe4Unity {
     public float PlaybackFPS = 60;
     public bool Restart;
 
+    public float RepeatDelay;
+    public float RepeatPeriod;
+
     private int _currFrame;
     private float _frameResidual;
+
+    private float _holdTime;
 
     private List<MachineState> _machineStates = new();
 
@@ -38,8 +43,20 @@ namespace Axe4Unity {
           StartingState.State.CopyTo(Runner.Machine.State);
         }
 
-        if (Keyboard.current.anyKey.wasPressedThisFrame) {
-          if (Keyboard.current.backspaceKey.wasPressedThisFrame) {
+        bool isPressed = false;
+        if (Keyboard.current.anyKey.isPressed) {
+          _holdTime += Time.deltaTime;
+        } else {
+          _holdTime = 0;
+        }
+
+        if (_holdTime > RepeatDelay) {
+          isPressed = true;
+          _holdTime -= RepeatPeriod;
+        }
+
+        if (Keyboard.current.anyKey.wasPressedThisFrame || isPressed) {
+          if (Keyboard.current.backspaceKey.isPressed) {
             _machineStates.RemoveAt(_machineStates.Count - 1);
             _machineStates[_machineStates.Count - 1].CopyTo(Runner.Machine.State);
 
