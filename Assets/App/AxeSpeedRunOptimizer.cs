@@ -14,6 +14,7 @@ namespace Axe4Unity {
     [Header("Simulation")]
     public int ExtraRightFrames;
     public int WinLine;
+    public int WinLine2;
     public int ContinueLine;
 
     [Header("Annealing")]
@@ -193,7 +194,8 @@ namespace Axe4Unity {
 
         frames++;
 
-        if (Runner.Machine.State.PC.LineIndex == WinLine) {
+        if (Runner.Machine.State.PC.LineIndex == WinLine ||
+            Runner.Machine.State.PC.LineIndex == WinLine2) {
           return frames;
         } else if (Runner.Machine.State.PC.LineIndex != ContinueLine) {
           Debug.Log("Found weird line at: " + Runner.Machine.State.PC.LineIndex);
@@ -213,7 +215,8 @@ namespace Axe4Unity {
 
         frames++;
 
-        if (Runner.Machine.State.PC.LineIndex == WinLine) {
+        if (Runner.Machine.State.PC.LineIndex == WinLine ||
+            Runner.Machine.State.PC.LineIndex == WinLine2) {
           return frames;
         } else if (Runner.Machine.State.PC.LineIndex != ContinueLine) {
           return int.MaxValue;

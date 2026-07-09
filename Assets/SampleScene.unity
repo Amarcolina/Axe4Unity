@@ -639,6 +639,7 @@ MonoBehaviour:
   OutputRecording: {fileID: 11400000, guid: 4a351af6053a78e4a84222aa016ec11d, type: 2}
   ExtraRightFrames: 16
   WinLine: 367
+  WinLine2: 502
   ContinueLine: 460
   MaxFrameMS: 60
   SimulationCount: 100000
