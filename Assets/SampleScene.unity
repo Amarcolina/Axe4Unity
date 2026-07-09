@@ -165,8 +165,8 @@ MonoBehaviour:
   Record: 0
   PlaybackFPS: 60
   Restart: 1
-  RepeatDelay: 0.5
-  RepeatPeriod: 0.05
+  RepeatDelay: 0.3
+  RepeatPeriod: 0.04
 --- !u!114 &212878742
 MonoBehaviour:
   m_ObjectHideFlags: 0
