@@ -135,13 +135,13 @@ namespace Axe4Unity {
           case 3: {
             //insert new move
             int frame = Random.Range(0, _neighborRun.Count);
-            _neighborRun.Insert(frame, Random.Range(2, 4));
+            _neighborRun.Insert(frame, Random.Range(2, 5));
             break;
           }
           case 4: {
             //Change move
             int frame = Random.Range(0, _neighborRun.Count);
-            _neighborRun[frame] = Random.Range(2, 4);
+            _neighborRun[frame] = Random.Range(2, 5);
             break;
           }
         }
