@@ -204,7 +204,7 @@ namespace Axe4Unity {
             Runner.Machine.State.PC.LineIndex == WinLine2) {
           return frames;
         } else if (Runner.Machine.State.PC.LineIndex != ContinueLine) {
-          Debug.Log("Found weird line at: " + Runner.Machine.State.PC.LineIndex);
+          //Debug.Log("Found weird line at: " + Runner.Machine.State.PC.LineIndex);
           return int.MaxValue;
         }
       }
