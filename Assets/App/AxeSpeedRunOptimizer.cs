@@ -15,6 +15,7 @@ namespace Axe4Unity {
     public int ExtraRightFrames;
     public int WinLine;
     public int WinLine2;
+    public int WinX;
     public int ContinueLine;
 
     [Header("Annealing")]
@@ -23,6 +24,7 @@ namespace Axe4Unity {
     public int MaxFrameLoss;
     public int ResetLossThreshold;
     public float SchedulePower;
+    public int MaxMutationCount;
 
     [Header("Runtime")]
     [Range(0, 100)]
@@ -112,7 +114,7 @@ namespace Axe4Unity {
       _neighborRun.Clear();
       _neighborRun.AddRange(_currRun);
 
-      for (int i = 0; i < Random.Range(1, 4); i++) {
+      for (int i = 0; i < Random.Range(1, MaxMutationCount + 1); i++) {
         switch (Random.Range(0, 5)) {
           case 0: {
             //nudge edge
@@ -192,6 +194,10 @@ namespace Axe4Unity {
           return int.MaxValue;
         }
 
+        if (playerX > WinX) {
+          return frames;
+        }
+
         frames++;
 
         if (Runner.Machine.State.PC.LineIndex == WinLine ||
@@ -211,6 +217,10 @@ namespace Axe4Unity {
         if (playerX > 8000) {
           //Glitch detected
           return int.MaxValue;
+        }
+
+        if (playerX > WinX) {
+          return frames;
         }
 
         frames++;
