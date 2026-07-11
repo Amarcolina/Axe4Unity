@@ -47,6 +47,9 @@ namespace Axe4Unity {
              "timing-oriented operations like Pause.")]
     public float TargetFPS = 30;
 
+    [Tooltip("Scales the amount of time a Pause operation waits for.")]
+    public float PauseTimeScale = 1f;
+
     [Tooltip("The target simulation scale.  Turning this up will cause the entire simulation " +
              "to speed up uniformly, generating frames more often, and having Pause operations " +
              "take less time.")]
@@ -128,6 +131,8 @@ namespace Axe4Unity {
 
       SimulateResults simResults = new();
 
+      bool runningAtStart = Running;
+
       int opsLeft = MaxOpsPerFrame;
       while (true) {
         try {
@@ -162,6 +167,10 @@ namespace Axe4Unity {
           Profiler.BeginSample("AxeRunner.OnStepCallback");
           OnStepExecution.Invoke(simResults.LastExecuted);
           Profiler.EndSample();
+
+          if (runningAtStart && !Running) {
+            break;
+          }
         }
 
         opsLeft--;
@@ -264,7 +273,7 @@ namespace Axe4Unity {
           _frameResidual = 1f / TargetFPS;
           break;
         } else if (simResults.PauseTime != 0) {
-          _frameResidual += simResults.PauseTime;
+          _frameResidual += simResults.PauseTime * PauseTimeScale;
         } else {
           _frameResidual += 1f / TargetFPS;
         }
