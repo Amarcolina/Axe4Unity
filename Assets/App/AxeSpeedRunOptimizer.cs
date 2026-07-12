@@ -104,6 +104,11 @@ namespace Axe4Unity {
         if (SimulationProgress >= SimulationCount) {
           OutputRecording.Frames.Clear();
           OutputRecording.Frames.AddRange(_bestRun);
+
+          while (OutputRecording.Frames.Count < BestCost) {
+            OutputRecording.Frames.Add(3);
+          }
+
           UnityEditor.EditorUtility.SetDirty(OutputRecording);
           enabled = false;
         }
