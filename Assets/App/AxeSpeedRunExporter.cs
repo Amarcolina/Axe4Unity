@@ -11,11 +11,8 @@ public class AxeSpeedRunExporter : MonoBehaviour {
 
   [ContextMenu("Export")]
   public void Export() {
-    var header = File.ReadAllBytes(HeaderPath).Take(74).ToArray();
-
-    byte[] fileData = Recordings.SelectMany(r => r.Frames).Select(f => (byte)f).ToArray();
-    int dataHeaderSize = 17;
-    int dataLengthSize = 2;
+    var dataSection = BuildDataSection();
+    var dataChecksum = CheckSum(dataSection);
 
     using (var writer = new BinaryWriter(File.Create(OutputPath))) {
       writer.Write((byte)'*');
@@ -32,34 +29,63 @@ public class AxeSpeedRunExporter : MonoBehaviour {
       writer.Write((byte)0x00);
 
       for (int i = 0; i < 42; i++) {
-        writer.Write((byte)0x00);
+        writer.Write((byte)' ');
       }
 
-      writer.Write((ushort)(fileData.Length + dataHeaderSize + dataLengthSize));
+      writer.Write((ushort)dataSection.Length);
 
-      //Data section
-      {
-        writer.Write((ushort)0x11);
-        writer.Write((ushort)(fileData.Length + dataLengthSize));
-        writer.Write((byte)15);
+      writer.Write(dataSection);
 
-        writer.Write((byte)'S');
-        writer.Write((byte)'P');
-        writer.Write((byte)'E');
-        writer.Write((byte)'E');
-        writer.Write((byte)'D');
-        writer.Write((byte)'R');
-        writer.Write((byte)'U');
-        writer.Write((byte)'N');
+      writer.Write(dataChecksum);
+    }
+  }
 
-        writer.Write((byte)0);
-        writer.Write((byte)0);
+  private ushort CheckSum(byte[] data) {
+    ushort sum = 0;
+    foreach (var b in data) {
+      sum += b;
+    }
+    return sum;
+  }
 
-        writer.Write((ushort)(fileData.Length + dataLengthSize));
-        writer.Write((ushort)(fileData.Length));
+  private byte[] BuildDataSection() {
+    var fileData = BuildFileData();
 
-        writer.Write(fileData);
-      }
+    using (var stream = new MemoryStream())
+    using (var writer = new BinaryWriter(stream)) {
+      writer.Write((ushort)11);
+      writer.Write((ushort)fileData.Length);
+      writer.Write((byte)0x15);
+
+      writer.Write((byte)'S');
+      writer.Write((byte)'P');
+      writer.Write((byte)'E');
+      writer.Write((byte)'E');
+      writer.Write((byte)'D');
+      writer.Write((byte)'R');
+      writer.Write((byte)'U');
+      writer.Write((byte)'N');
+
+      writer.Write((byte)0);
+      writer.Write((byte)0);
+
+      writer.Write((ushort)fileData.Length);
+
+      writer.Write(fileData);
+
+      return stream.ToArray();
+    }
+  }
+
+  private byte[] BuildFileData() {
+    using (var stream = new MemoryStream())
+    using (var writer = new BinaryWriter(stream)) {
+      byte[] fileData = Recordings.SelectMany(r => r.Frames).Select(f => (byte)f).ToArray();
+
+      writer.Write((ushort)fileData.Length);
+      writer.Write(fileData);
+
+      return stream.ToArray();
     }
   }
 
