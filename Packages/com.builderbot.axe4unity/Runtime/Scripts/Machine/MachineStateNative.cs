@@ -272,7 +272,7 @@ namespace Axe4Unity {
 
     public UnsafeList<byte> GetArchiveFileData(ushort fileId) {
       if (!MountedFiles.TryGetValue(fileId, out var fileName)) {
-        throw new InvalidOperationException($"Could not load file at index {fileId}, was it loaded?");
+        throw new InvalidOperationException($"Could not load file with id {fileId}, was it loaded?");
       }
 
       return GetArchiveFileData(fileName);

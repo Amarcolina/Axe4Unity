@@ -78,6 +78,10 @@ namespace Axe4Unity {
 
     public bool WaitForKey;
 
+    public bool MemoryRandomization;
+
+    public uint MemoryRandomizationSeed;
+
     private Machine _machine;
     public Machine Machine => _machine;
 
@@ -87,6 +91,32 @@ namespace Axe4Unity {
 
     public void ResetMachine() {
       _machine.Reset();
+
+      if (MemoryRandomization) {
+        var r = new Unity.Mathematics.Random(MemoryRandomizationSeed);
+        for (int i = 0; i < _machine.State.Memory.Length; i++) {
+          if (i >= Machine.ADDR_PROGRAM_MEMORY &&
+              i < (Machine.ADDR_PROGRAM_MEMORY + 0x4000)) {
+            continue;
+          }
+
+          if (i >= Machine.ADDR_FILE_HANDLE &&
+              i < (Machine.ADDR_FILE_HANDLE + 60)) {
+            continue;
+          }
+
+          if (i >= Machine.ADDR_RANDOM_STATE &&
+              i < (Machine.ADDR_RANDOM_STATE + 2)) {
+            continue;
+          }
+
+          if (r.NextBool()) {
+            _machine.State.Memory[i] = 0;
+          } else {
+            _machine.State.Memory[i] = (byte)r.NextInt(1, 256);
+          }
+        }
+      }
 
       foreach (var entry in AppVars) {
         if (entry.Archive) {
@@ -163,13 +193,15 @@ namespace Axe4Unity {
           return simResults;
         }
 
+        bool shouldBreak = false;
+
         if (OnStepExecution != null) {
           Profiler.BeginSample("AxeRunner.OnStepCallback");
           OnStepExecution.Invoke(simResults.LastExecuted);
           Profiler.EndSample();
 
           if (runningAtStart && !Running) {
-            break;
+            shouldBreak = true;
           }
         }
 
@@ -214,6 +246,10 @@ namespace Axe4Unity {
             simResults.WaitForNextUnityFrame = true;
             break;
           }
+        }
+
+        if (shouldBreak) {
+          break;
         }
       }
 

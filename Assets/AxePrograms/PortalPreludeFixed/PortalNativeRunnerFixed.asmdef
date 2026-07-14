@@ -1,0 +1,17 @@
+{
+    "name": "PortalNativeRunner2",
+    "rootNamespace": "",
+    "references": [
+        "GUID:28fb26b3a609c8343af1c14a277b34c3",
+        "GUID:2665a8d13d1b3f18800f46e256720795"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

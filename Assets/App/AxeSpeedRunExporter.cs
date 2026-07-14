@@ -2,12 +2,22 @@ using UnityEngine;
 using System.IO;
 using System.Linq;
 using Axe4Unity;
+using System.Collections;
+using System.Collections.Generic;
 
 public class AxeSpeedRunExporter : MonoBehaviour {
 
-  public string HeaderPath;
   public string OutputPath;
+  public MachineStateAsset[] States;
   public AxeSpeedRunRecording[] Recordings;
+  public AxeSpeedRunOptimizer Optimizer;
+
+  public AxeSpeedRunRecording A, B;
+
+  [ContextMenu("Ammend")]
+  public void Ammend() {
+    B.Frames.AddRange(A.Frames);
+  }
 
   [ContextMenu("Export")]
   public void Export() {
@@ -37,6 +47,29 @@ public class AxeSpeedRunExporter : MonoBehaviour {
       writer.Write(dataSection);
 
       writer.Write(dataChecksum);
+    }
+  }
+
+  [ContextMenu("Start trim recordings")]
+  public void StartTrimRecordings() {
+    StartCoroutine(TrimRecordings());
+  }
+
+  public IEnumerator TrimRecordings() {
+    for (int i = 0; i < States.Length; i++) {
+      Optimizer.StartingState = States[i];
+      Optimizer.InputRecording = Recordings[i];
+      Optimizer.OutputRecording = Recordings[i];
+      Optimizer.enabled = true;
+      Optimizer.SimulationCount = 1;
+
+      yield return null;
+      yield return null;
+      yield return null;
+
+      Optimizer.enabled = false;
+
+      yield return null;
     }
   }
 
@@ -80,10 +113,24 @@ public class AxeSpeedRunExporter : MonoBehaviour {
   private byte[] BuildFileData() {
     using (var stream = new MemoryStream())
     using (var writer = new BinaryWriter(stream)) {
-      byte[] fileData = Recordings.SelectMany(r => r.Frames).Select(f => (byte)f).ToArray();
+      List<byte> fileData = new();
+      int offset = Recordings.Length * 2;
+      foreach (var r in Recordings) {
+        fileData.Add((byte)(offset & 0xFF));
+        fileData.Add((byte)(offset >> 8));
+        offset += r.Frames.Count;
+        offset += 8;
+      }
 
-      writer.Write((ushort)fileData.Length);
-      writer.Write(fileData);
+      foreach (var r in Recordings) {
+        fileData.AddRange(r.Frames.Select(f => (byte)f));
+        for (int i = 0; i < 8; i++) {
+          fileData.Add(3);
+        }
+      }
+
+      writer.Write((ushort)fileData.Count);
+      writer.Write(fileData.ToArray());
 
       return stream.ToArray();
     }

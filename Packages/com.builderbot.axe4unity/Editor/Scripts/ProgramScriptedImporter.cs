@@ -1,4 +1,5 @@
 using System.IO;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
@@ -14,6 +15,8 @@ namespace Axe4Unity {
 
     [Tooltip("Should a native-runner script be generated for this program.\n\nCURRENTLY EXPERIMENTAL!")]
     public bool GenerateNativeRunner;
+
+    public bool OutputText;
 
     public override void OnImportAsset(AssetImportContext ctx) {
       List<List<Token>> lines;
@@ -35,7 +38,9 @@ namespace Axe4Unity {
         return;
       }
 
-      //File.WriteAllLines("Parsed.txt", lines.Select(l => Token.ToString(l)));
+      if (OutputText) {
+        File.WriteAllLines("Parsed.txt", lines.Select(l => Token.ToString(l)));
+      }
 
       var program = Compiler.Compile(lines, Path.GetDirectoryName(ctx.assetPath));
 

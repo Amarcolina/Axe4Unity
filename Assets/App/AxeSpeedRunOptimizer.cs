@@ -38,12 +38,14 @@ namespace Axe4Unity {
     private List<int> _neighborRun = new();
     private List<int> _bestRun = new();
 
-    private void Start() {
+    private void OnEnable() {
       Runner.Running = false;
 
+      _currRun = new();
       _currRun.AddRange(InputRecording.Frames);
       _bestRun = _currRun.ToList();
 
+      SimulationProgress = 0;
       CurrCost = GetCost(_currRun);
       StartCost = CurrCost;
       BestCost = CurrCost;
@@ -102,15 +104,24 @@ namespace Axe4Unity {
         Progress = 100f - Mathf.Round(10000f * scheduleT) / 100f;
 
         if (SimulationProgress >= SimulationCount) {
+          if (BestCost == int.MaxValue) {
+            throw new System.Exception();
+          }
+
           OutputRecording.Frames.Clear();
           OutputRecording.Frames.AddRange(_bestRun);
 
           while (OutputRecording.Frames.Count < BestCost) {
             OutputRecording.Frames.Add(3);
           }
+          while (OutputRecording.Frames.Count > BestCost) {
+            OutputRecording.Frames.RemoveAt(OutputRecording.Frames.Count - 1);
+          }
 
           UnityEditor.EditorUtility.SetDirty(OutputRecording);
           enabled = false;
+
+          Debug.Log($"Output {OutputRecording.name} with {BestCost} frames");
         }
       }
     }

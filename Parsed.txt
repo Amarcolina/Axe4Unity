@@ -1,0 +1,1503 @@
+.Portal
+|E86D7->^^oPENX
+|E86D8->^^oPENY
+L1+680->^^oCUT
+DiagnosticOff
+FnOff 
+Fix 5
+ClrDraw
+"Portal2"->Str1PP
+UnArchive Str1PP
+^^o`Y5->^^oPSAVE
+!If GetCalc(Str1PP)->PSAVE
+GetCalc(Str1PP,1)->PSAVE
+1->{PSAVE}
+End
+"PortalPK"->Str0PP
+!If GetCalc(Str0PP,`Y2)
+Text(0,0,"A vital data file is missing,
+Text(0,7,"Make sure all files were
+Text(0,14,"transfered successfully."
+DispGraph
+getKey^^r
+Return
+End
+..AXE
+^^o`Y0->^^oY0
+^^o`Y1->^^oY1
+^^o`Y2->^^oY2
+Lbl START
+conj([827C381000000000],L1+8,8
+conj([8080C0E0F8000000],L1,8
+DeltaList(32,32,23,20,18,18,27,30)->Str1X
+DeltaList(4,1,~2,~2,7,10,13,13)->Str1Y
+ClrDraw
+0->theta
+Repeat theta=23
+If getKey
+Goto MEN
+End
+Pt-On(int(theta^8+Str1X},int(theta^8+Str1Y},Shade_t(L1)->C
+conj(L1+8,L1,8
+conj(C,L1+8,8
+DispGraph
+If theta+1->theta<16
+ClrDraw
+End
+Pause 100
+End
+conj(Pic2M,L6,208
+DispGraph
+Pause 500
+90->B
+0->A
+540
+While 1
+->F
+If getKey
+Goto MEN
+End
+conj(Pic2M+216,F+216+L6,552-F
+If A+B->A>90
+F-12->F
+A-90->A
+End
+B--
+DispGraph
+End!If F
+Lbl MEN
+conj(Pic2M,L6,768
+getKey
+1->theta
+While 1
+{DeltaList(2,38,75)+theta}->X
+rref(X,51,19,7
+rref(X+1,50,17,9
+DispGraph
+Repeat getKey->K
+End
+rref(X,51,19,7
+rref(X+1,50,17,9
+K=3-(K=2)+theta+3^3->theta
+If K=15
+Goto QUIT
+End
+EndIf K=54
+!If theta
+Goto LOAD
+End
+!If theta-1
+Goto SELECT
+End
+Lbl QUIT
+ClrDraw
+Text(0,0,"Saving...
+DispGraph
+Archive Str1PP
+Return
+Lbl TOP
+0->{L1+690}^^r
+Y->{L1+702}^^r
+..AXE
+0->K->{L5}
+Fill(L5,120
+{^^o`Y0+2}->{^^o`Y1+2}
+{{L1+704}*2+`Y0}^^r+Y0->Y1
+L4->I
+While 1
+{`Y1}->A
+Y1+1->Y1
+Fill(A/16->{I},A^16+1->B
+EndIf 216+L4<=(I+B->I
+L5+16->L
+{`Y1}->{L5}
+For(F,1,{L5})
+Y1+1->Y1
+!If {`Y1}-1
++1->{L}^^r
+{`Y1+1}->{r6}->{L+12}^^r
+11->{L4+{r6}}
+0->{L+14}^^r
+I8({r6},L+2,256)
+End
+!If {`Y1}-2
++2->{L}^^r
+{`Y1+2}->{r6}->{L+8}^^r
+I8({`Y1+1},L+2,5)
+15->{L+6}^^r
+Pic2O->{L+14}^^r
+!If {L4+{r6}+18}
+Pic2O+24->{L+14}^^r
+End
+9->{{`Y1+1}+L4}
+{{r2}+2}^^r-1->{{r2}+2}^^r
+I8({`Y1+2},L+10,5)
+End
+!If {`Y1}-3
+3->{L}->{L+2}
+5->{{`Y1+1}+L4}
+10->{{`Y1+2}+L4}
+{`Y1+1}->{L+10}
+{`Y1+3}/16-1*51->{L+12}
+{`Y1+3}^16-1*51->{L+13}
+{`Y1+2}->{L+14}
+End
+{`Y1}+Y1->Y1
+L+16->L
+End
+For(X,0,17
+For(Y,0,11
+X*5->C
+Y*5->D
+{Y*18+X->{r6}+L4}->A
+{{r6}+1+L4}->V
+{{r6}-1+L4}->T
+{Y+1*18+X+L4}->Z
+{Y-1*18+X+L4}->P
+If A<=3
+SPT(A!=0*5
+End
+If A>=10
+SPT(A-10*5+100
+A=10*3->{{r6}+L4}
+If A=11
+!If {L4-18+{r6}}-2
+3->{L4-18+{r6}}
+End
+End
+End
+!If A-1
+SPT(T=0*5+90
+End
+!If A-9
+SPT(85
+3->{{r6}+L4}
+End
+!If A-4/2
+A=4*20->theta
+If C-85
+!If V
+SPT(45+theta
+End
+End
+If D-55
+!If Z
+SPT(50+theta
+End
+End
+If C
+!If T
+SPT(55+theta
+End
+End
+If D
+!If P
+SPT(60+theta
+End
+End
+End
+!If A-7
+SPT(X^2*5+35
+End
+!If A-8
+SPT(X+Y^2*5+25
+End
+!If A-6
+SPT(P=0*5+15
+End
+!If A-3
+C+1->{r3}+2->{r4}
+D+1->{r5}+2->{r6}
+If X
+If S(T)
+Pxl-Off({r3},{r5}
+Pxl-Off({r3},{r6}
+End
+End
+If X-17
+If S(V)
+Pxl-Off({r4},{r5}
+Pxl-Off({r4},{r6}
+End
+End
+If Y-11
+If S(Z)
+Pxl-Off({r3},{r6}
+Pxl-Off({r4},{r6}
+End
+End
+If Y
+If S(P)
+Pxl-Off({r3},{r5}
+Pxl-Off({r4},{r5}
+End
+End
+End
+End
+End
+ref(0,60,96,7
+ref(90,0,6,64
+63->{r1}
+While pxl-Test(89,{r1}-1->{r1}
+End
+If {L1+704}^^r-18<6
+rref(90,{r1}-9,7,10
+Else
+rref(90,0,5,64)
+ref(89,{r1}+1,6,64
+End
+Goto EN
+Lbl S
+ReturnIf {r1}=0
+{r1}>3 and ({r1}<9
+Return
+Lbl I8
+{r1}^18*{r3}->{{r2}}^^r
+{r1}/18*{r3}->{{r2}+2}^^r
+Return
+Lbl SPT
+Pt-Off(C,D,{r1}+Pic1
+Return
+Lbl EN
+expr(L6,L3,768
+63->theta
+While pxl-Test(0,theta)^^r
+theta-1->theta
+End
+If {L1+692}^^r
+..AXE
+Fix 5
+theta-4*256->Z
+90->X
+{L1+702}^^r*5->Y
+ref(85,Y/256,5,5
+rref(85,Y/256,5,5
+If {`Y0}^^r<{L1+704}^^r
+50*256->Z
+End
+!If {L1+700}^^r
+conj(Pic2M,L6,768
+70->Y
+0->X
+ref(0,63,96,1
+rref(0,63,5,1
+0->A
+0->B
+0->C
+While C-64
+A+B->A
+B+1->B
+If A>64
+Vertical -
+A-64->A
+C+1->C
+End
+DispGraph
+End
+70*256->Y
+Repeat Y<=Z
+Y-128->Y
+ref(0,0,5,64
+rref(0,0,5,64
+Pt-On(0,Y/256,Pic2P
+ref(0,Y/256+5,5,64
+DispGraph
+Pause 10
+End
+TALK()
+Goto TR2
+End
+If {L1+688}^^r
+If {L1+704}^^r-18<7
+13->GDB0C
+89->X
+7->{r6}
+0->F->A
+Repeat F>=96
+48-abs(F-48)+2+A->A
+While A>GDB0C
+Horizontal -
+For(G,0,7
+Pt-On(95,G*8,Plot2(F,G*8)^^r
+End
+F++
+X--
+A-GDB0C->A
+End
+If F>48
+If F^2
+If {r6}
+X++
+{r6}--
+End
+End
+End
+32-({r6}*32/7/8*8)^32+Pic2->{r1}
+Pt-Change(X,Y/256->{r2},{r1}
+Pxl-Change(X+3,{r2}+1
+DispGraph
+Pxl-Change(X+3,{r2}+1
+Pt-Change(X,{r2},{r1}
+End
+Goto TR1
+End
+End
+0->B->A
+While 1
+A-B->A
+While A<<0
+Vertical +
+A+256->A
+End
+B+16->B
+Horizontal -
+Horizontal -
+ref(94,0,2,64)
+X-2->X
+B/2->{r6}
+If Y-{r6}>>Z
+Y-{r6}->Y
+ElseIf Y+{r6}<<Z
+Y+{r6}->Y
+Else
+Z->Y
+End
+Pt-On(X,Y/256,Pic2P
+ref(X-2,Y/256+5,8,32
+DispGraph
+Pause 15
+If X
+Pt-Change(X,Y/256,Pic2P
+End
+End!If X
+TALK()
+Lbl TR2
+If {`Y0}<{L1+704}^^r
+Repeat Y<<~1200
+Y-128->Y
+ref(0,0,5,64
+rref(0,0,5,64
+Pt-On(0,Y/256,Pic2P
+ref(0,Y/256+5,5,66
+DispGraph
+Pause 30
+End
+Pause 1200
+If {L1+688}^^r
+Goto CREDITS
+End
+Goto MEN
+End
+256*2+210->B
+63*256->C
+While 1
+If Y+128<<Z
+Y+128->Y
+ElseIf Y-128>>Z
+Y-128->Y
+Else
+Z->Y
+End
+conj(C/256*12->{r6}+L3,L6,768-{r6}
+If (Y/256)-(C/256)-5->{r1}<<0
+0->{r1}
+End
+ref(0,{r1},5,128
+rref(0,{r1},5,128
+ref(0,Y/256+5,5,64
+B-16->B
+If B<32
+32->B
+End
+Pt-On(X,Y/256,Pic2P
+DispGraph
+Pause 20
+C-B->C
+EndIf C<<0
+Lbl TR1
+Else
+RecallPic 
+End
+1->CUT->{L1+700}^^r->{L1+692}^^r
+theta-4*256/5->Y
+~9->N->O->S->T->Q->V
+Fill(L1,40,0
+2->{L1+14}^^r
+0->X->F->A->B->K
+DispGraph
+Lbl CONT
+While 1
+RecallPic 
+X->D
+Y->E
+A->G
+B->H
+sub(PL)
+sub(PO,0)
+sub(PL)
+sub(PO,0)
+D->X
+E->Y
+G->A
+H->B
+FullScreen
+sub(P)
+Normal
+Pt-On({L1+16}^^r,{L1+18}^^r,{L1+16}^^r/2^4*8*(A!=0 and {L1+12}^^r)+Pic2
+Pxl-On({L1+16}^^r+1+{L1+14}^^r,{L1+18}^^r+1)
+If A
+2->{L1+14}^^r
+End
+If A<<0
+0->{L1+14}^^r
+End
+sub(OB)
+If {L1+690}^^r
+Goto D
+End
+Pt-Change(N,O,Q>=2*32+(F/2^4*8)+Pic1P
+Pt-Change(S,T,V>=2*32+(F/2/2^4*8)+Pic1P
+DispGraph
+F+1->F
+getKey->K
+If K=27 and (S!=~9
+expr(^^oN,^^oS,10
+End
+EndIf X>4556 and {L1+12}^^r or getKey(15)
+If getKey(15)
+..AXE
+Fix 5
+1->theta->K
+While 1
+ClrDraw
+Text(32,1,"CONTINUE
+Text(34,10,"RESTART
+Text(40,19,"EXIT
+ref(33,theta,30,1
+ref(33,theta+6,30,1
+While 1
+DispGraph^^r
+getKey->K
+EndIf K
+K=1-(K=4)*9+theta->theta
+theta=~8-(theta=28)*27+theta->theta
+EndIf K=15 or (K=54
+If theta=10
+0->{L1+692}
+RecallPic 
+DispGraph
+Goto TOP
+End
+If theta=19
+Goto MEN
+End
+Goto CONT
+End
+..AXE
+If {L1+688}
+!If {L1+704}-17
+If CUT
+DeltaList(~12,0,12,0)->Str1C89
+For(F,0,31
+DispGraph(int(F^4+Str1C89}+L6
+Pause F+1*10
+End
+Pause 800
+For(F,18,19)
+LDSTR(F)
+CLRTOP()
+|LCLRTOP->{r4}
+0->{r1}->{^^oPENX}
+1->K->{^^oPENY}
+While {{r3}}
+If K
+TEXT()
+Else
+getKey->K
+End
+End
+getKey^^r
+End
+For(F,65,95
+For(G,50,54
+rref(F,G,5,1
+DispGraph
+Pause 100
+End
+F+4->F
+End
+RecallPic 
+rref(65,50,31,5
+Fill(L4+193,5,0)
+Pause 300
+StorePic 
+0->CUT
+End
+If Y<1280
+Goto CONT
+End
+End
+End
+{L1+704}+1->{L1+704}
+max({L1+704},{PSAVE})->{PSAVE}
+Goto TOP
+Lbl OB
+0->{L1+20}^^r->{L1+36}^^r+1->L
+If getKey(54)
+If {L1+32}^^r
+1->{L1+36}^^r
+End
+0->{L1+32}^^r
+Else
+1->{L1+32}^^r
+End
+For(P,1,{L5}
+P*16+L5->{r6}
+{{r6}}->{r5}
+{{r6}+2}^^r->D
+{{r6}+4}^^r->E
+{{r6}+6}^^r->G
+{{r6}+8}^^r->H
+!If {r5}-1
+sub(O1,1)
+sub(O1,0)
+End
+!If {r5}-2
+sub(O2)
+End
+!If {r5}-3
+sub(O3)
+End
+D->{{r6}+2}^^r
+E->{{r6}+4}^^r
+G->{{r6}+6}^^r
+H->{{r6}+8}^^r
+End
+Return
+..AXE
+Lbl CREDITS
+~30->G
+Fix 3
+For(F,34,38
+LDSTR(F)
+3->{r1}->{^^oPENX}
+1->K->{^^oPENY}
+CLRCR()
+|LCLRCR->{r4}
+While {{r3}}
+CRSLOT()
+If K
+TEXT()
+Else
+getKey->K
+DispGraph
+End
+End
+0->K
+Repeat K
+getKey->K
+CRSLOT()
+DispGraph
+End
+End
+CLRCR()
+Repeat G>=>=64
+CRSLOT()
+DispGraph
+End
+Fix 2
+Pause 800
+For(F,0,165
+For(G,0,63
+rref(F-G,G,1,4
+G+3->G
+End
+DispGraph
+End
+Goto START
+Lbl CRSLOT
+Pxl-Change(1,G+20
+Pxl-Change(1,G
+Pxl-Change(94,G+20
+Pxl-Change(94,G
+If G+1->G=80
+~20->G
+End
+Return
+..AXE
+Lbl D
+For(F,0,40
+F*8+L1+200->L
+rand^256+X->{L}^^r
+rand^256+Y->{L+2}^^r
+rand^32-16->{L+4}^^r
+rand^32-16->{L+6}^^r
+End
+For(F,0,60
+RecallPic 
+For(G,0,40
+G*8+L1+200->L
+{L}^^r+{L+4}^^r->{L}^^r
+{L+6}^^r+1->{L+6}^^r
+{L+2}^^r+{L+6}^^r->{L+2}^^r
+Pxl-On({L}^^r*5/256,{L+2}^^r*5/256
+End
+sub(OB)
+DispGraph
+End
+0->{L1+692}^^r
+Goto TOP
+Return
+..Portal
+Lbl C
+If {L1+20}^^r
+E->{L1+24}^^r/5*6*3+(D->{L1+22}^^r/5)
+Else
+D*5/256->{L1+22}^^r
+E*5/256->{L1+24}^^r
+{^^oE+1}*6*3+{^^oD+1}
+End
+{+L4}->M->{L1+26}^^r
+If {L1+22}^^r>200
+3->{L1+26}^^r
+End
+If {L1+22}^^r-89-1+256/256
+{L1+22}^^r-93-1+256/256*3->M
+End
+If {L1+24}^^r*4/256
++2->M
+End
+!If L/2
+M-1<5->M
+!If S+9
+Goto RTO
+End
+End
+!If L
+Goto RTO
+End
+!If -3
+M-2<6
+Goto RT1
+End
+!If Q/2
+!If {L1+22}^^r-N-1>=5+({L1+24}^^r-O>=8
+->M
+End
+Else
+!If {L1+22}^^r-N>=8+({L1+24}^^r-O-1>=5
+->M
+End
+End
+!If L-2
+M=2
+Lbl RT1
+->M
+Return
+End
+!If V/2
+!If {L1+22}^^r-S-1>=5+({L1+24}^^r-T>=8
+->M
+End
+Else
+!If {L1+22}^^r-S>=8+({L1+24}^^r-T-1>=5
+->M
+End
+End
+Lbl RTO
+M
+Return
+..Portal
+Lbl PO
+1-(Q<2->theta)->Z
+{L1+16}^^r+2+Z>N and (N+5+Z>{L1+16}^^r) and ({L1+18}^^r+2+theta>O) and (O+5+theta>{L1+18}^^r)->R
+1-(V<2->theta)->Z
+{L1+16}^^r+2+Z>S and (S+5+Z>{L1+16}^^r) and ({L1+18}^^r+2+theta>T) and (T+5+theta>{L1+18}^^r)->W
+Return!If R or W
+2
+While ->theta
+If R
+H->{L1+30}^^r
+sub(GO)
+1-I->I
+sub(RO)
+Pt-On({L1+22}^^r,{L1+24}^^r,Pic2+{r1}
+!If I-1
+E-(O*256/5)->{L1+28}^^r
+{L1+22}^^r->{L1+16}^^r*256/5+1->D
+{L1+24}^^r->{L1+18}^^r*256/5+1->E
+sub(M)
+End
+End
+expr(^^oN,^^oS,10
+theta-1
+End
+Return
+..Portal
+Lbl PL
+If getKey(48)
+!If {PSAVE}-39
+H-1->H
+End
+End
+0->I->theta->{L1+20}^^r+1->L
+E->Y-52->E
+!If H//32768
+E+307->E
+End
+D->X-52->D
+5
+While 1
+->Z
+D+52->D
+C()+I->I
+End!If Z-1
+!If I->{L1+12}^^r
+If F^2
+If H-51
+H+1->H
+End
+End
+!If F^4-1
+Lbl GAD
+If G
+<<0*2-1+G->G
+End
+End
+Else
+If getKey(4)
+If H<10
+~17
+End
+End
+->H
+If Y^256<52
+51->{^^oY}
+End
+If A
+Goto GAD
+End
+End
+Y+H->Y->E
+Y56()
+16->{r1}
+!If {L1+12}^^r
+11->{r1}
+End
+If getKey(2)
+!If G+{r1}-1//32768
+G-2->G
+End
+End
+If getKey(3)
+If G-{r1}//32768
+G+2->G
+End
+End
+X-52->D
+If G>=>=0
+D+307->D
+End
+Y->E
+C()->I
+E+204->E
+C()+I->I
+If I
+0->G
+End
+Y->E
+X+G->X->D
+X56()
+E+100->E
+D+100->D
+C()
+!If {L1+26}^^r-6
+~9->S->N
+End
+D-100->D
+E+103->E
+DTH()
+D+203->D
+DTH()
+E-203->E
+DTH()
+D-203->D
+Return
+Lbl DTH
+C()
+{L1+26}^^r>6+{L1+690}^^r->{L1+690}^^r
+Return
+..AXE
+Lbl P
+1->{L1+20}^^r
+If {L1+8}^^r
+{L1}^^r->D
+{L1+2}^^r->E
+{L1+10}^^r
+Repeat -1->Z//32768
+If {L1+8}^^r>(rand^1024
+ref(D,E,2,2
+End
+{L1+4}^^r+D->D
+{L1+6}^^r+E->E
+Z-1
+End
+{L1+8}^^r-256->{L1+8}^^r
+End
+ReturnIf R
+ReturnIf W
+!If getKey(20) or getKey(19) or getKey(18)-(getKey(36) or getKey(35) or getKey(34))->G*2+(getKey(34) or getKey(26) or getKey(18)-(getKey(36) or getKey(28) or getKey(20))->H)
+->{L1+38}^^r
+Return
+End
+ReturnIf {L1+38}^^r
++1->{L1+38}^^r
+{L1+16}^^r+2->D->{L1}^^r
+{L1+18}^^r+2->E->{L1+2}^^r
+3->L
+1024->{L1+8}^^r
+0->{L1+10}^^r->I->J
+G*2->{L1+4}^^r
+H*2->{L1+6}^^r
+While 1
+{L1+4}^^r*2+D->D
+{L1+6}^^r*2+E->E
+sub(C)
+{L1+10}^^r+4->{L1+10}^^r
+EndIf M or (D<<0 or (E<<0
+While 1
+D-G->D
+E-H->E
+sub(C)
+Return!If {L1+10}^^r-1->{L1+10}^^r
+End!If M
+D+1->D
+If sub(C)
+->I-1->C
+End
+D-2->D
+If sub(C)
+->C-2->I
+End
+D+1->D
+E+1->E
+If sub(C)
+->J+1->C
+End
+E-2->E
+If sub(C)
+-2->J
+3->C
+End
+E+1->E
+Return!If I*2+J
+C!=2-1+D->D->G
+E->H
+sub(BMP,~3,+2)
+sub(BMP,4,1)
+sub(BMP,~3,+2)
+ReturnIf theta-1
+G+I->D
+H+J->E
+Return!If sub(C)
+sub(EXX)
+G-2->N
+H-4->O
+C->Q
+Return!If 
+!If -1
+N-3->N
+O+1->O
+Return
+End
+!If -1
+N-1->N
+O+2->O
+Return
+End
+!If -1
+N-2->N
+O-1->O
+Return
+End
+Lbl EXX
+expr(^^oN,^^oS,10
+Return
+Lbl BMP
+0->theta
+While 1
+0->Z->L
+J*{r1}+G->D
+I*{r1}*~1+H->E
+sub(C)
+M->Z
+2->L
+J*{r2}+D+I->D
+I*{r2}*~1+E+J->E
+sub(C)
+If M=0 or Z->Z
+.If sub(C) or (2->LJ*{r2}+D+I->DI*{r2}*~1+E+J->Esub(C)=0)->Z
+J*{r2}*~1+G->G
+I*{r2}+H->H
+End
+Return!If theta+1->theta-9
+End!If Z
+Return
+ 
+..AXE
+Lbl M
+Q*10+V->C
+If C=11 or (C=0
+~G->G
+End
+If C=22 or (C=33
+~1*{L1+30}^^r->H
+T*256/5+{L1+28}^^r+H->E*256/5->{L1+18}^^r
+If H>~13
+~13->H
+End
+End
+If C=12 or (C=3 or (C=20 or (C=31
+~H->Z
+G->H
+Z->G
+End
+If C=2 or (C=13 or (C=21 or (C=30
+~G->Z
+H->G
+Z->H
+End
+Return
+Lbl RO
+If V<2
+T+J-2->{L1+24}^^r
+!If V
+S+1-I->{L1+22}^^r
+Else
+S+2+I->{L1+22}^^r
+End
+Else
+S+5-J->{L1+22}^^r
+!If V-2
+T+1-I->{L1+24}^^r
+Else
+T+2+I->{L1+24}^^r
+End
+End
+Return
+Lbl GO
+If Q<2
+{L1+18}^^r+2-O->J
+!If Q
+N+1-{L1+16}^^r->I
+Else
+{L1+16}^^r-N-2->I
+End
+Else
+N+5-{L1+16}^^r->J
+!If Q-2
+O+1-{L1+18}^^r->I
+Else
+{L1+18}^^r-O-2->I
+End
+End
+Return
+..AXE
+Lbl O3
+If F^1024->{r3}<32
+If {r3}<8
+Pt-On(Dsub(X56),Esub(Y56),{r3}/2*8+40+Pic2
+End
+If {r3}=29
+sub(I8,{{r6}+10},^^oD,256
+int({r6}+12}->G*6+D+25->D
+int({r6}+13}->H*6+E+25->E
+End
+Return
+End
+!If D
+E+1->E
+Pt-On(G,H,E/4*8+Pic2O
+If E=11
+0->{{r6}}
+End
+Return
+End
+D+G->Dsub(X56)
+E+H->Esub(Y56)
+D+103->D
+E+103->E
+If D>X and (X+256>D and (E>Y and (Y+256>E
+1->{L1+690}
+End
+sub(C)
+D-103->D
+E-103->E
+If M
+!If {L1+26}^^r-4
+->D->E->{{{r6}+14}+L4}
+sub(I8,{{r6}+14},^^oG,5
+Pt-Change(G,H,Pic2O)^^r
+Return
+End
+~G->G+D->Dsub(X56)
+~H->H+E->Esub(Y56)
+End
+sub(PO,40)
+Pt-On({L1+16}^^r,{L1+18}^^r,Pic2+40
+Return
+..AXE
+Lbl 0O0
+DeltaList(51,204)->GDB0O0
+{//32768+GDB0O0+1}
+Return
+Lbl O1
+Dsub(X56)
+Esub(Y56)
+D->theta+102->D
+E->C+(Hsub(0O0))->E
+sub(C) or (D+51->Dsub(C))->M
+theta->D
+C->E
+!If {L1+26}^^r-6
+!If {{r6}+14}^^r
++1->{{r6}+14}^^r
+End
+End
+If {{r6}+14}^^r
+{{r6}+14}^^r+1->{r1}->{{r6}+14}^^r
+!If {r1}-64
+->{{r6}+14}^^r
+0->G->H
+I8({{r6}+12}^^r,^^oD,256)
+!If {{r6}+10}^^r-2
+0->{{r6}+10}^^r
+0->{L1+34}^^r
+End
+End
+End
+!If {{r6}+10}-1
+M->{{r6}+10}
+End
+!If {{r6}+10}
+If {r1}
+If H-50
+H+1->H
+End
+End
+If M
+!If G
+H>>0->{{r6}+10}
+Else
+<<0*2-1*2+G->G
+End
+0->H
+End
+E+H->theta+153->E
+D->C+(Gsub(0O0))->D
+If sub(C)
+-1->G
+End
+C+G->Dsub(X56)
+theta->Esub(Y56)
+sub(PO,32)
+End
+!If {{r6}+10}-2
+DeltaList(~153^^r,153^^r)->GDB0D0
+{{L1+14}^^r+GDB0D0}^^r+X->D
+Y->E
+End
+If {L1+36}^^r
+If {{r6}+10} xor {L1+34}^^r-2//32768
+!If D+256<X
+!If X+256<D
+!If E+128<Y
+!If Y+256<E
+->{L1+36}^^r
+{{r6}+10}-2<<0*2->{L1+34}^^r->{{r6}+10}
+A->G
+B-5->H
+D+102->D
+E+204->E
+sub(C)->J
+D+52->D
+sub(C)
+E-204->E
+D-154->D
+If M or J
+X->D
+Y->E
+End
+End
+End
+End
+End
+End
+End
+!If {{r6}+14}^^r/2/2/2^2
+ref({L1+16}^^r+2,{L1+18}^^r+2,2,2
+End
+Return
+..AXE
+Lbl O2
+{{r6}+14}^^r->{r1}
+If pxl-Test(D,E) or pxl-Test(D+1,E) or pxl-Test(D+2,E) or pxl-Test(D+3,E) or pxl-Test(D+4,E)
+0->{L4+H}
+G!=16+G->G
+!If G-2
+Pt-Change({{r6}+10},{{r6}+12},{r1})^^r
+End
+Else
+G-(G!=0)->G
+3->{L4+H}
+!If G-1
+Pt-On({{r6}+10},{{r6}+12},{r1})^^r
+End
+End
+If G<12 and (G!=0
+Pt-On({{r6}+10},{{r6}+12},G/4*8+{r1}
+End
+ref(D,G!=0+E,5,1
+Return
+..AXE
+[2030207088000000]->Pic2P
+[]->Pic1
+.0
+[0000000000]
+.5
+[F8F8F8F8F8]
+.10
+[F8F8F8F8F8]
+.15
+[5000500050]
+.20
+[00A800A800]
+.25
+[A850A850A8]
+.30
+[50A850A850]
+.35
+[00A8A8F8F8]
+.40
+[005050F8F8]
+.45
+[F0E0F0E0F0]
+.50
+[F8F8F8A800]
+.55
+[7838783878]
+.60
+[00A8F8F8F8]
+.65
+[F880C080F8]
+.70
+[F8A8888888]
+.75
+[F8081808F8]
+.80
+[888888A8F8]
+.85
+[5070F8F8F8]
+.90
+[F8005000F8]
+.95
+[88A888A888]
+.100
+[8888F88888]
+.105
+[A8F8700000]
+.110
+[F888F888F8]
+..AXE
+[2020207088000000202020F0100000002020202020000000202020784000000000006060000000000020502000000000007050700000000020508850200000008800000088000000]->Pic2
+[0808101008081010081010080810100810100808101008081008081010080810000000CC33000000000000669900000000000033CC0000000000009966000000]->Pic1P
+[8888F8888800000088F800F888000000F8000000F8000000F8202020F8000000D8505050D80000008888888888000000]->Pic2O
+[0000303000000000]->Pic1O
+[A850A850A800000050A850A850000000]->Pic4O
+..AXE
+Lbl LOAD
+0->N->{L1}
+conj("",L3,1)
+L1->theta
+{|E9830}^^r->A
+Repeat A<{|E982E}^^r
+Fill(theta,9,0)
+{A}->T
+A-6->A
+{A}->I
+A-1->A
+If T=21 and ({A}>64
+For(F,0,I-1
+{A-F}->{theta+F}
+End
+conj(theta,L3+1,9
+GetCalc(L3,`Y1)
+If {`Y1}^^r=64222
+theta+9->theta
+N+1->N
+End
+End
+A-I->A
+End
+theta->I
+!If theta-L1
+Goto MEN
+End
+0->theta
+32->Y
+While 1
+ref(21,29,36,31
+rref(21,29,36,31
+Pxl-On(23,Y
+Pxl-On(22,Y+1
+Pxl-On(22,Y-1
+For(F,0,4
+If F+theta<N
+Text(25,F*6+29,F+theta*9+L1
+End
+End
+DispGraph
+Repeat getKey->K
+End
+(K=1)*(Y-32/6+theta+1<N)-(K=4)*6+Y->Y
+If Y<32
+32->Y
+If theta
+theta-1->theta
+End
+End
+If Y>56
+56->Y
+If theta+5<N
+theta+1->theta
+End
+End
+If K=15
+Goto MEN
+End
+EndIf K=54
+conj(Y-32/6+theta*9+L1,L3+1,8)
+GetCalc(L3,`Y0)
+Y0+2->Y0
+0->{L1+688}^^r
+1->{L1+704}^^r
+0->{L1+700}^^r
+1->{L1+692}^^r
+Goto TOP
+..AXE
+Lbl SELECT
+ref(40,30,15,15
+rref(40,30,15,15
+Text(40,34,"<
+1->N
+While 1
+Text(44,34,N/10>Dec
+Text(49,34,N^10>Dec
+Text(53,34,">
+DispGraph
+Repeat getKey->K
+End
+If K=38
+38->N->{PSAVE}
+End
+If K=3 and (N!=min(38,{PSAVE})
+N+1->N
+End
+If K=2 and (N!=1
+N-1->N
+End
+If K=15
+Goto MEN
+End
+EndIf K=54
+1->{L1+688}^^r
+N->{L1+704}^^r
+0->{L1+700}^^r
+Y2+2->Y0
+{^^o`Y2+2}->{^^o`Y0+2}
+1->{L1+692}^^r
+Goto TOP
+..AXE
+[000000000000000000000000]->Pic2M
+[0000003E0000000000000000]
+[0000008E8000000000000000]
+[000001C64000000000000000]
+[000F83E261F81FE010030000]
+[000FE41271FC1FE038030000]
+[000C6000618E030038030000]
+[000C67C0498603006C030000]
+[000C6700898E03006C030000]
+[000FE60019FC03007C030000]
+[000F844039F00300FE030000]
+[000C0480F9B80300FE030000]
+[000C0180019C0301C7030000]
+[000C0392098E03018303F000]
+[000C0191F18703038383F000]
+[00000098E000000000000000]
+[001FFE5C43FFFFFFFFFFF800]
+[0000001F0000000000000000]
+[000000000000000000000000]
+[00000003FFFFFFFFE0000000]
+[0000000739C6F59C70000000]
+[000000075ADEF5ADF0000000]
+[0000000739CEF5ACF0000000]
+[000000077ADEF5ADF0000000]
+[000000077AC6319C70000000]
+[00000007FFFFFFFFF0000000]
+[0000000FFFFFFFFFF8000000]
+[3FFFFFFFFFFFFFFFFFFFFFFC]
+[7FFFFFFFFFFFFFFFFFFFFFFE]
+[70001C00070000E00038000E]
+[608A08000200004000100006]
+[608A08040202004000500016]
+[608A0804020400400090C026]
+[60FE0815023FFE460092CE26]
+[60000811026C1A4660903026]
+[60540811025CE2418093CF26]
+[6054080402470E41C0900026]
+[6010080A0242324264900026]
+[600008040242C44258900026]
+[606C08000243184040500016]
+[604408000242604020100006]
+[601008000243804007D001F6]
+[604408404232004004100106]
+[606C0864C20C004FE413F906]
+[600008358200005014140506]
+[70001C00070000E00038000E]
+[7FFFFFFFFFFFFFFFFFFFFFFE]
+[7FFFFFFFFFFFFFFFFFFFFFFE]
+[7FFFFFFFFFFFFFFFFFFFFFFE]
+[7FFFFFFFFFFFFFFFFFFFFFFE]
+[7FFFFFFFFFFFFFFFFFFFFFFE]
+[7FFFFFFFFFFFFFFFFFFFFFFE]
+[77113FFFFF1715FFFFF8A88E]
+[77555FFFFF5755FFFFFBADDE]
+[77515FFFFF1711FFFFF9DDDE]
+[77555FFFFF775BFFFFFBADDE]
+[71153FFFFF715BFFFFF8A8DE]
+[7FFFFFFFFFFFFFFFFFFFFFFE]
+[7FFFFFFFFFFFFFFFFFFFFFFE]
+[7FFFFFFFFFFFFFFFFFFFFFFE]
+[7FFFFFFFFFFFFFFFFFFFFFFE]
+[7FFFFFFFFFFFFFFFFFFFFFFE]
+[3FFFFFFFFFFFFFFFFFFFFFFC]
+[000000000000000000000000]
+..AXE
+Lbl CLRIN
+ref(7,0,89,64
+Return
+Lbl CLRCR
+ref(2,0,92,64
+Return
+Lbl CLRTOP
+ref(0,0,96,30
+rref(0,0,96,29
+Return
+Lbl LDSTR
+^^o`Y6->^^oY6
+^^o`Y7->^^oY7
+conj(^^o`Y2,^^o`Y6,3
+conj(^^o`Y2,^^o`Y7,3
+({`Y6}^^r)+Y6->Y6
+{r1}*2+Y6->Y7
+({`Y7}^^r)+Y6+2->Y6
+L2->{r1}
+While 1
+{`Y6}->{r2}->{{r1}}
+Y6++
+{r1}++
+End!If {r2}
+L2->{r3}
+Return
+.X START {r1}
+.Str1 IN {r3}
+.CLR FUNC {r4}
+Lbl TEXT
+{{r3}}=' '->{r6}
+!If {{r3}}-'*'
+{r3}++
+0->K
+Return
+End
+!If {{r3}}-'+'
+If {^^oPENX}-{r1}
+{^^oPENY}+6->{^^oPENY}
+End
+{^^oPENY}+2->{^^oPENY}
+{r1}->{^^oPENX}
+{r3}++
+End
+!If {{r3}}-'^'
+({r4})()
+{r1}->{^^oPENX}
+1->{^^oPENY}
+{r3}++
+End
+DrawF {{r3}}>Frac
+DispGraph
+{r3}++
+If {r6}
+If inString(' ',{r3})*4+{^^oPENX}>92
+{r1}->{^^oPENX}
+{^^oPENY}+6->{^^oPENY}
+End
+End
+Return
+..AXE
+Lbl TALK
+If {L1+688}^^r
+{L1+704}->{r1}
+ReturnIf {r1}>=18 and ({r1}<=24
+Return!If {r1}-31
+If {r1}>=18
+{r1}-5->{r1}
+End
+If {r1}>=26
+{r1}--
+End
+Pause 500
+LDSTR()
+Fix 3
+CLRIN()
+|LCLRIN->{r4}
+8->{r1}->{^^oPENX}
+1->K->{^^oPENY}
+~30->F
+While {{r3}}
+SLOT()
+If K
+TEXT()
+Else
+getKey->K
+If K=15
+Goto SKPL
+End
+DispGraph
+End
+End
+0->K
+Repeat F>>65 and K
+SLOT()
+If getKey
+1->K
+CLRIN()
+End
+DispGraph
+End
+Lbl SKPL
+Fix 2
+End
+Return
+Lbl SLOT
+Pxl-Change(6,F
+Pxl-Change(6,F+15
+!If F+1->F-80
+~30->F
+End
+Return
+Lbl X56
+*5/256->{L1+16}^^r
+Return
+Lbl Y56
+*5/256->{L1+18}^^r
+Return
