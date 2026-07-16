@@ -1535,7 +1535,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1049941224
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1548,11 +1548,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b199a95537c4efa498b23fd54d4332aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Axe4Unity.AxeSpeedRunFixer
-  RunnerOld: {fileID: 1558785197}
+  RunnerOld: {fileID: 1441760000}
   RunnerNew: {fileID: 1309531941}
-  StartingState: {fileID: 11400000, guid: d92d0a0772841a649a7afe0ad226bbf0, type: 2}
-  InputRecording: {fileID: 11400000, guid: a2719e6e43e670c42b63435e5ff4ffe7, type: 2}
-  OutputRecording: {fileID: 11400000, guid: 2606b6b30bbf8654ebff5ac1bf38d5ef, type: 2}
+  StartingState: {fileID: 11400000, guid: 7557892580603e741976a62204166e00, type: 2}
+  InputRecording: {fileID: 11400000, guid: 601fb31aa54a2ed41b0f505676fae97d, type: 2}
+  OutputRecording: {fileID: 11400000, guid: 46569caf6b5246d42b1c310e8f6ff0d2, type: 2}
   ExtraRightFrames: 16
   WinLine: 338
   WinLine2: 341
@@ -1560,10 +1560,10 @@ MonoBehaviour:
   ContinueLine: 460
   MaxFrameMS: 60
   SimulationCount: 100000
-  MaxFrameLoss: 4000
-  ResetLossThreshold: 100000
+  MaxFrameLoss: 1000
+  ResetLossThreshold: 1000
   SchedulePower: 3
-  MaxMutationCount: 3
+  MaxMutationCount: 6
   Progress: 0
   SimulationProgress: 0
   StartCost: 0
@@ -1982,8 +1982,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Axe4Unity::Axe4Unity.AxeSpeedRunController
   Runner: {fileID: 1309531941}
   Controls: {fileID: 1309531942}
-  Recording: {fileID: 11400000, guid: 32bf7326a8f2991409fc3533dc3e9526, type: 2}
-  StartingState: {fileID: 11400000, guid: 93597270c187ebd4dbd369e47b845999, type: 2}
+  Recording: {fileID: 11400000, guid: 91099ecb77d8080469f001becd524f81, type: 2}
+  StartingState: {fileID: 11400000, guid: 7442fb3c32e9fbc4b944f32723822558, type: 2}
   Record: 0
   PlaybackFPS: 60
   Restart: 1
@@ -2388,6 +2388,165 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 620df6e5351ea63419196d43362a2d4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Axe4Unity::Axe4Unity.CalcButton
+--- !u!1001 &1441759997
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 101614207626153836, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 52.1829
+      objectReference: {fileID: 0}
+    - target: {fileID: 101614207626153836, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 78.32482
+      objectReference: {fileID: 0}
+    - target: {fileID: 101614207626153836, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 101614207626153836, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 101614207626153836, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 101614207626153836, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 101614207626153836, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 101614207626153836, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 101614207626153836, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 101614207626153836, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1518577579370267955, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
+      propertyPath: Screen
+      value: 
+      objectReference: {fileID: 243740616}
+    - target: {fileID: 1518577579370267955, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
+      propertyPath: Program
+      value: 
+      objectReference: {fileID: -2686810026668816932, guid: 81bcb166b03a9cf48bfe508c7f31b0dd, type: 3}
+    - target: {fileID: 1518577579370267955, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
+      propertyPath: Running
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1518577579370267955, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
+      propertyPath: NativeRunner
+      value: 
+      objectReference: {fileID: 1441760003}
+    - target: {fileID: 1518577579370267955, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
+      propertyPath: AppVars.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1518577579370267955, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
+      propertyPath: AppVars.Array.data[0].AppVar
+      value: 
+      objectReference: {fileID: -2686810026668816932, guid: def3e9092321cd8449ced53977ffe746, type: 3}
+    - target: {fileID: 1518577579370267955, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
+      propertyPath: AppVars.Array.data[1].AppVar
+      value: 
+      objectReference: {fileID: 7239065423396753691, guid: 2d150f091becc7e49b184375822bdabc, type: 3}
+    - target: {fileID: 6044494911366066962, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
+      propertyPath: CalcKeyboard
+      value: 
+      objectReference: {fileID: 1127775007}
+    - target: {fileID: 7639334103058008323, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
+      propertyPath: m_Name
+      value: AxeRunner_Old
+      objectReference: {fileID: 0}
+    - target: {fileID: 7639334103058008323, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7639334103058008323, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1441760002}
+    - targetCorrespondingSourceObject: {fileID: 7639334103058008323, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1441760003}
+  m_SourcePrefab: {fileID: 100100000, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
+--- !u!1 &1441759998 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7639334103058008323, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
+  m_PrefabInstance: {fileID: 1441759997}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1441759999 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6044494911366066962, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
+  m_PrefabInstance: {fileID: 1441759997}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1441759998}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0770e9814fce0c248952ee02848fcdc4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Axe4Unity::Axe4Unity.AxeKeyboardControl
+--- !u!114 &1441760000 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1518577579370267955, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
+  m_PrefabInstance: {fileID: 1441759997}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1441759998}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c9d4aff72e4319428440e4e47bae58b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Axe::AxeRunner
+--- !u!114 &1441760002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1441759998}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4980a94e17174b4a8e3fa19fe4cf437, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Axe4Unity::Axe4Unity.AxeSpeedRunController
+  Runner: {fileID: 1441760000}
+  Controls: {fileID: 1441759999}
+  Recording: {fileID: 11400000, guid: 46569caf6b5246d42b1c310e8f6ff0d2, type: 2}
+  StartingState: {fileID: 11400000, guid: 7557892580603e741976a62204166e00, type: 2}
+  Record: 0
+  PlaybackFPS: 60
+  Restart: 1
+  RepeatDelay: 0.3
+  RepeatPeriod: 0.04
+--- !u!114 &1441760003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1441759998}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfd3270a33de56a438a05c02cd150a62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: PortalNativeRunner::APORTAL_NativeRunner
 --- !u!1 &1458342976
 GameObject:
   m_ObjectHideFlags: 0
@@ -2454,165 +2613,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &1558785196
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 101614207626153836, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 52.1829
-      objectReference: {fileID: 0}
-    - target: {fileID: 101614207626153836, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 78.32482
-      objectReference: {fileID: 0}
-    - target: {fileID: 101614207626153836, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 101614207626153836, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 101614207626153836, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 101614207626153836, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 101614207626153836, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 101614207626153836, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 101614207626153836, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 101614207626153836, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1518577579370267955, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
-      propertyPath: Screen
-      value: 
-      objectReference: {fileID: 243740616}
-    - target: {fileID: 1518577579370267955, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
-      propertyPath: Program
-      value: 
-      objectReference: {fileID: -2686810026668816932, guid: 81bcb166b03a9cf48bfe508c7f31b0dd, type: 3}
-    - target: {fileID: 1518577579370267955, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
-      propertyPath: Running
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1518577579370267955, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
-      propertyPath: NativeRunner
-      value: 
-      objectReference: {fileID: 1558785200}
-    - target: {fileID: 1518577579370267955, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
-      propertyPath: AppVars.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1518577579370267955, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
-      propertyPath: AppVars.Array.data[0].AppVar
-      value: 
-      objectReference: {fileID: -2686810026668816932, guid: def3e9092321cd8449ced53977ffe746, type: 3}
-    - target: {fileID: 1518577579370267955, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
-      propertyPath: AppVars.Array.data[1].AppVar
-      value: 
-      objectReference: {fileID: 7239065423396753691, guid: 2d150f091becc7e49b184375822bdabc, type: 3}
-    - target: {fileID: 6044494911366066962, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
-      propertyPath: CalcKeyboard
-      value: 
-      objectReference: {fileID: 1127775007}
-    - target: {fileID: 7639334103058008323, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
-      propertyPath: m_Name
-      value: AxeRunner_Old
-      objectReference: {fileID: 0}
-    - target: {fileID: 7639334103058008323, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 7639334103058008323, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1558785201}
-    - targetCorrespondingSourceObject: {fileID: 7639334103058008323, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1558785200}
-  m_SourcePrefab: {fileID: 100100000, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
---- !u!114 &1558785197 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1518577579370267955, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
-  m_PrefabInstance: {fileID: 1558785196}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1558785199}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c9d4aff72e4319428440e4e47bae58b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Axe::AxeRunner
---- !u!114 &1558785198 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6044494911366066962, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
-  m_PrefabInstance: {fileID: 1558785196}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1558785199}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0770e9814fce0c248952ee02848fcdc4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Axe4Unity::Axe4Unity.AxeKeyboardControl
---- !u!1 &1558785199 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7639334103058008323, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
-  m_PrefabInstance: {fileID: 1558785196}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1558785200
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1558785199}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bfd3270a33de56a438a05c02cd150a62, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::APORTAL_NativeRunner
---- !u!114 &1558785201
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1558785199}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d4980a94e17174b4a8e3fa19fe4cf437, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Axe4Unity::Axe4Unity.AxeSpeedRunController
-  Runner: {fileID: 1558785197}
-  Controls: {fileID: 1558785198}
-  Recording: {fileID: 11400000, guid: 32bf7326a8f2991409fc3533dc3e9526, type: 2}
-  StartingState: {fileID: 11400000, guid: 93597270c187ebd4dbd369e47b845999, type: 2}
-  Record: 0
-  PlaybackFPS: 60
-  Restart: 1
-  RepeatDelay: 0.3
-  RepeatPeriod: 0.04
 --- !u!1001 &1595459870
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3236,7 +3236,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &2049983528
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3244,15 +3244,15 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2049983527}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ccc999973e1230843bfd59e8e43f12ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Axe4Unity::Axe4Unity.AxeSpeedRunOptimizer
-  Runner: {fileID: 212878737}
-  StartingState: {fileID: 11400000, guid: f616c983087961f488acc327c505fb79, type: 2}
-  InputRecording: {fileID: 11400000, guid: 83554af013901aa4d88211bb344a9f73, type: 2}
-  OutputRecording: {fileID: 11400000, guid: 83554af013901aa4d88211bb344a9f73, type: 2}
+  Runner: {fileID: 1309531941}
+  StartingState: {fileID: 11400000, guid: 7557892580603e741976a62204166e00, type: 2}
+  InputRecording: {fileID: 11400000, guid: 46569caf6b5246d42b1c310e8f6ff0d2, type: 2}
+  OutputRecording: {fileID: 11400000, guid: b19b97d6c1fd20447b335a6619baa527, type: 2}
   ExtraRightFrames: 16
   WinLine: 367
   WinLine2: 338
@@ -3260,7 +3260,7 @@ MonoBehaviour:
   ContinueLine: 460
   MaxFrameMS: 60
   SimulationCount: 100000
-  MaxFrameLoss: 4
+  MaxFrameLoss: 10
   ResetLossThreshold: 100
   SchedulePower: 3
   MaxMutationCount: 6
@@ -3403,7 +3403,7 @@ SceneRoots:
   - {fileID: 902025598}
   - {fileID: 612846072}
   - {fileID: 1720302553}
-  - {fileID: 1558785196}
+  - {fileID: 1441759997}
   - {fileID: 1309531940}
   - {fileID: 330516927}
   - {fileID: 1458342978}

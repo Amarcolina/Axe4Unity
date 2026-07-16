@@ -45,7 +45,7 @@ namespace Axe4Unity {
     private List<(int x, int y)> _playerVelList = new();
     private List<(int x, int y)> _playerVelListReference = new();
 
-    private void OnEnable() {
+    private void Start() {
       RunnerOld.Running = false;
 
       _currRun = new();
@@ -317,8 +317,8 @@ namespace Axe4Unity {
         }
 
         int dVel = 0;
-        dVel += Mathf.Abs(velOld.x - velOld.x);
-        dVel += Mathf.Abs(velOld.y - velOld.y);
+        dVel += Mathf.Abs(velOld.x - velNew.x);
+        dVel += Mathf.Abs(velOld.y - velNew.y);
 
         if (dVel < 128) {
           cost += 128;
