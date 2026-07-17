@@ -1207,13 +1207,13 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 936f0e6a712a6fa4aba5425c92bab0f7, type: 2}
   - {fileID: 11400000, guid: 18ec51e6323688444a5331e42c3e1e54, type: 2}
   - {fileID: 11400000, guid: 84f50f182340fa6498e0a3c0175539dc, type: 2}
-  - {fileID: 11400000, guid: b54733428a2ca31448bbdc43df3a712b, type: 2}
+  - {fileID: 11400000, guid: f2988117be9848c4289349475ccba278, type: 2}
   - {fileID: 11400000, guid: 754b7401e89fd7c40944d9138b5e69af, type: 2}
   - {fileID: 11400000, guid: 91099ecb77d8080469f001becd524f81, type: 2}
   - {fileID: 11400000, guid: 46569caf6b5246d42b1c310e8f6ff0d2, type: 2}
   - {fileID: 11400000, guid: 15b826c861f1f164289738a590edd256, type: 2}
-  - {fileID: 11400000, guid: ea09dea57c917ef44b9843a55cbd048b, type: 2}
-  - {fileID: 11400000, guid: 4b04b7c3f34bf7941aa482ad9cda0c9b, type: 2}
+  - {fileID: 11400000, guid: 3ea3cc84f32952b4c9b285ea5dd97499, type: 2}
+  - {fileID: 11400000, guid: 422e712c17be05d48b2b24ec892a55c4, type: 2}
   - {fileID: 11400000, guid: b69bcb78ed2f4c644be9306256b85231, type: 2}
   - {fileID: 11400000, guid: 12757429349d0c349844de54e31f969d, type: 2}
   - {fileID: 11400000, guid: c4575a24c5967f649af1249aacee10dc, type: 2}
@@ -1983,8 +1983,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Axe4Unity::Axe4Unity.AxeSpeedRunController
   Runner: {fileID: 1309531941}
   Controls: {fileID: 1309531942}
-  Recording: {fileID: 11400000, guid: d6afcdc31e1ea9d4ca9a6e1a54687c5d, type: 2}
-  StartingState: {fileID: 11400000, guid: 3da49d23610df0742a6f028755684d39, type: 2}
+  Recording: {fileID: 11400000, guid: 915cf448213258740b89d4c88bcf40fc, type: 2}
+  StartingState: {fileID: 11400000, guid: 9d6e898c502488a49992f135e9d9347b, type: 2}
   Record: 0
   PlaybackFPS: 60
   Restart: 1
@@ -3251,9 +3251,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Axe4Unity::Axe4Unity.AxeSpeedRunOptimizer
   Runner: {fileID: 1309531941}
-  StartingState: {fileID: 11400000, guid: 3da49d23610df0742a6f028755684d39, type: 2}
-  InputRecording: {fileID: 11400000, guid: d6afcdc31e1ea9d4ca9a6e1a54687c5d, type: 2}
-  OutputRecording: {fileID: 11400000, guid: 15b826c861f1f164289738a590edd256, type: 2}
+  StartingState: {fileID: 11400000, guid: dd0963e4e008daa408e10eb52a34d519, type: 2}
+  InputRecording: {fileID: 11400000, guid: 1f06d0ae8841c684dbdd1e6fd68d462e, type: 2}
+  OutputRecording: {fileID: 11400000, guid: f2988117be9848c4289349475ccba278, type: 2}
   ExtraRightFrames: 16
   WinLine: 367
   WinLine2: 338
