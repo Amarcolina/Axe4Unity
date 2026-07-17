@@ -12,11 +12,12 @@ public class AxeSpeedRunExporter : MonoBehaviour {
   public AxeSpeedRunRecording[] Recordings;
   public AxeSpeedRunOptimizer Optimizer;
 
-  public AxeSpeedRunRecording A, B;
+  public AxeSpeedRunRecording A, B, AB;
 
   [ContextMenu("Ammend")]
   public void Ammend() {
-    B.Frames.AddRange(A.Frames);
+    AB.Frames.AddRange(A.Frames);
+    AB.Frames.AddRange(B.Frames);
   }
 
   [ContextMenu("Export")]

@@ -1200,7 +1200,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 57c1f903cdebf2246b1bbe60151ef9f0, type: 2}
   - {fileID: 11400000, guid: 8e986d38a396fd44d86dec9e7cf6e909, type: 2}
   - {fileID: 11400000, guid: 9f9fea3c388a87a4ea9bb6efe5f082f8, type: 2}
-  - {fileID: 11400000, guid: 72ea213d5c7e1a24b8929633d6fe22f6, type: 2}
+  - {fileID: 11400000, guid: 416ceee79832eb342b85ecfc7fb99c5b, type: 2}
   - {fileID: 11400000, guid: 1165323c49107f04ab98bb7727d9fb4d, type: 2}
   - {fileID: 11400000, guid: 6f4554f01a2cf0e41ba5008e7e314baf, type: 2}
   - {fileID: 11400000, guid: 2606b6b30bbf8654ebff5ac1bf38d5ef, type: 2}
@@ -1211,7 +1211,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 754b7401e89fd7c40944d9138b5e69af, type: 2}
   - {fileID: 11400000, guid: 91099ecb77d8080469f001becd524f81, type: 2}
   - {fileID: 11400000, guid: 46569caf6b5246d42b1c310e8f6ff0d2, type: 2}
-  - {fileID: 11400000, guid: 202a750ad4c4e6149807ab2fce9e90ee, type: 2}
+  - {fileID: 11400000, guid: 15b826c861f1f164289738a590edd256, type: 2}
   - {fileID: 11400000, guid: ea09dea57c917ef44b9843a55cbd048b, type: 2}
   - {fileID: 11400000, guid: 4b04b7c3f34bf7941aa482ad9cda0c9b, type: 2}
   - {fileID: 11400000, guid: b69bcb78ed2f4c644be9306256b85231, type: 2}
@@ -1219,10 +1219,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c4575a24c5967f649af1249aacee10dc, type: 2}
   - {fileID: 11400000, guid: 19beb5ec2e799624589090452c64458d, type: 2}
   - {fileID: 11400000, guid: eaa3f8abb58b5634f89e62f634aaa244, type: 2}
-  - {fileID: 11400000, guid: fd33a5052dec3f449b40ccdd440a0223, type: 2}
+  - {fileID: 11400000, guid: 15a633b29cab18049b611a0165db24c3, type: 2}
   Optimizer: {fileID: 2049983528}
-  A: {fileID: 11400000, guid: aa65682e1933c5d478dc6bf4eef81c3f, type: 2}
-  B: {fileID: 11400000, guid: 8e986d38a396fd44d86dec9e7cf6e909, type: 2}
+  A: {fileID: 11400000, guid: 4a351af6053a78e4a84222aa016ec11d, type: 2}
+  B: {fileID: 11400000, guid: aa65682e1933c5d478dc6bf4eef81c3f, type: 2}
+  AB: {fileID: 11400000, guid: 8e986d38a396fd44d86dec9e7cf6e909, type: 2}
 --- !u!4 &661368452
 Transform:
   m_ObjectHideFlags: 0
@@ -1551,8 +1552,8 @@ MonoBehaviour:
   RunnerOld: {fileID: 1441760000}
   RunnerNew: {fileID: 1309531941}
   StartingState: {fileID: 11400000, guid: 7557892580603e741976a62204166e00, type: 2}
-  InputRecording: {fileID: 11400000, guid: 601fb31aa54a2ed41b0f505676fae97d, type: 2}
-  OutputRecording: {fileID: 11400000, guid: 46569caf6b5246d42b1c310e8f6ff0d2, type: 2}
+  InputRecording: {fileID: 11400000, guid: d380a7e0d2f69624ea0acaa3cb28d683, type: 2}
+  OutputRecording: {fileID: 11400000, guid: d380a7e0d2f69624ea0acaa3cb28d683, type: 2}
   ExtraRightFrames: 16
   WinLine: 338
   WinLine2: 341
@@ -1982,8 +1983,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Axe4Unity::Axe4Unity.AxeSpeedRunController
   Runner: {fileID: 1309531941}
   Controls: {fileID: 1309531942}
-  Recording: {fileID: 11400000, guid: d380a7e0d2f69624ea0acaa3cb28d683, type: 2}
-  StartingState: {fileID: 11400000, guid: c9c7367cbd666f04cb15198479259fcd, type: 2}
+  Recording: {fileID: 11400000, guid: d6afcdc31e1ea9d4ca9a6e1a54687c5d, type: 2}
+  StartingState: {fileID: 11400000, guid: 3da49d23610df0742a6f028755684d39, type: 2}
   Record: 0
   PlaybackFPS: 60
   Restart: 1
@@ -3236,7 +3237,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &2049983528
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3250,9 +3251,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Axe4Unity::Axe4Unity.AxeSpeedRunOptimizer
   Runner: {fileID: 1309531941}
-  StartingState: {fileID: 11400000, guid: b866c28b641a91347a690d18977e43e3, type: 2}
-  InputRecording: {fileID: 11400000, guid: 1a9ea9562074d43459018b21f22b6402, type: 2}
-  OutputRecording: {fileID: 11400000, guid: 19beb5ec2e799624589090452c64458d, type: 2}
+  StartingState: {fileID: 11400000, guid: 3da49d23610df0742a6f028755684d39, type: 2}
+  InputRecording: {fileID: 11400000, guid: d6afcdc31e1ea9d4ca9a6e1a54687c5d, type: 2}
+  OutputRecording: {fileID: 11400000, guid: 15b826c861f1f164289738a590edd256, type: 2}
   ExtraRightFrames: 16
   WinLine: 367
   WinLine2: 338
