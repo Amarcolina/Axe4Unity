@@ -1217,7 +1217,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b69bcb78ed2f4c644be9306256b85231, type: 2}
   - {fileID: 11400000, guid: 12757429349d0c349844de54e31f969d, type: 2}
   - {fileID: 11400000, guid: c4575a24c5967f649af1249aacee10dc, type: 2}
-  - {fileID: 11400000, guid: 19beb5ec2e799624589090452c64458d, type: 2}
+  - {fileID: 11400000, guid: 004d4978f31f22a47b1bac4058b28324, type: 2}
   - {fileID: 11400000, guid: eaa3f8abb58b5634f89e62f634aaa244, type: 2}
   - {fileID: 11400000, guid: 15a633b29cab18049b611a0165db24c3, type: 2}
   Optimizer: {fileID: 2049983528}
@@ -1901,7 +1901,7 @@ PrefabInstance:
       objectReference: {fileID: -2686810026668816932, guid: 6956366d7cd1b384ba8a872a94cb26d7, type: 3}
     - target: {fileID: 1518577579370267955, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
       propertyPath: Running
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1518577579370267955, guid: 15c7be4d26e86f24c92396218ce70c33, type: 3}
       propertyPath: NativeRunner
@@ -1983,8 +1983,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Axe4Unity::Axe4Unity.AxeSpeedRunController
   Runner: {fileID: 1309531941}
   Controls: {fileID: 1309531942}
-  Recording: {fileID: 11400000, guid: 915cf448213258740b89d4c88bcf40fc, type: 2}
-  StartingState: {fileID: 11400000, guid: 9d6e898c502488a49992f135e9d9347b, type: 2}
+  Recording: {fileID: 11400000, guid: 87258150082e0c84fb083663c8f3a795, type: 2}
+  StartingState: {fileID: 11400000, guid: b866c28b641a91347a690d18977e43e3, type: 2}
   Record: 0
   PlaybackFPS: 60
   Restart: 1
@@ -3251,9 +3251,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Axe4Unity::Axe4Unity.AxeSpeedRunOptimizer
   Runner: {fileID: 1309531941}
-  StartingState: {fileID: 11400000, guid: dd0963e4e008daa408e10eb52a34d519, type: 2}
-  InputRecording: {fileID: 11400000, guid: 1f06d0ae8841c684dbdd1e6fd68d462e, type: 2}
-  OutputRecording: {fileID: 11400000, guid: f2988117be9848c4289349475ccba278, type: 2}
+  StartingState: {fileID: 11400000, guid: b866c28b641a91347a690d18977e43e3, type: 2}
+  InputRecording: {fileID: 11400000, guid: 87258150082e0c84fb083663c8f3a795, type: 2}
+  OutputRecording: {fileID: 11400000, guid: 004d4978f31f22a47b1bac4058b28324, type: 2}
   ExtraRightFrames: 16
   WinLine: 367
   WinLine2: 338
