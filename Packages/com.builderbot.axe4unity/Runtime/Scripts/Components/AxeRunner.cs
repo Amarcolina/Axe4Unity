@@ -47,6 +47,9 @@ namespace Axe4Unity {
              "timing-oriented operations like Pause.")]
     public float TargetFPS = 30;
 
+    [Tooltip("Scales the amount of time a Pause operation waits for.")]
+    public float PauseTimeScale = 1f;
+
     [Tooltip("The target simulation scale.  Turning this up will cause the entire simulation " +
              "to speed up uniformly, generating frames more often, and having Pause operations " +
              "take less time.")]
@@ -75,6 +78,10 @@ namespace Axe4Unity {
 
     public bool WaitForKey;
 
+    public bool MemoryRandomization;
+
+    public uint MemoryRandomizationSeed;
+
     private Machine _machine;
     public Machine Machine => _machine;
 
@@ -84,6 +91,32 @@ namespace Axe4Unity {
 
     public void ResetMachine() {
       _machine.Reset();
+
+      if (MemoryRandomization) {
+        var r = new Unity.Mathematics.Random(MemoryRandomizationSeed);
+        for (int i = 0; i < _machine.State.Memory.Length; i++) {
+          if (i >= Machine.ADDR_PROGRAM_MEMORY &&
+              i < (Machine.ADDR_PROGRAM_MEMORY + 0x4000)) {
+            continue;
+          }
+
+          if (i >= Machine.ADDR_FILE_HANDLE &&
+              i < (Machine.ADDR_FILE_HANDLE + 60)) {
+            continue;
+          }
+
+          if (i >= Machine.ADDR_RANDOM_STATE &&
+              i < (Machine.ADDR_RANDOM_STATE + 2)) {
+            continue;
+          }
+
+          if (r.NextBool()) {
+            _machine.State.Memory[i] = 0;
+          } else {
+            _machine.State.Memory[i] = (byte)r.NextInt(1, 256);
+          }
+        }
+      }
 
       foreach (var entry in AppVars) {
         if (entry.Archive) {
@@ -128,6 +161,8 @@ namespace Axe4Unity {
 
       SimulateResults simResults = new();
 
+      bool runningAtStart = Running;
+
       int opsLeft = MaxOpsPerFrame;
       while (true) {
         try {
@@ -158,10 +193,16 @@ namespace Axe4Unity {
           return simResults;
         }
 
+        bool shouldBreak = false;
+
         if (OnStepExecution != null) {
           Profiler.BeginSample("AxeRunner.OnStepCallback");
           OnStepExecution.Invoke(simResults.LastExecuted);
           Profiler.EndSample();
+
+          if (runningAtStart && !Running) {
+            shouldBreak = true;
+          }
         }
 
         opsLeft--;
@@ -205,6 +246,10 @@ namespace Axe4Unity {
             simResults.WaitForNextUnityFrame = true;
             break;
           }
+        }
+
+        if (shouldBreak) {
+          break;
         }
       }
 
@@ -264,7 +309,7 @@ namespace Axe4Unity {
           _frameResidual = 1f / TargetFPS;
           break;
         } else if (simResults.PauseTime != 0) {
-          _frameResidual += simResults.PauseTime;
+          _frameResidual += simResults.PauseTime * PauseTimeScale;
         } else {
           _frameResidual += 1f / TargetFPS;
         }

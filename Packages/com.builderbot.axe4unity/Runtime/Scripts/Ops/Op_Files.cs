@@ -128,7 +128,7 @@ namespace Axe4Unity.Op {
         id++;
       }
 
-      Debug.Log($"Mounted file with name {name} into file variable with id {id}");
+      Debug.Log($"Mounted file with name {name} into file variable with id {id} at address {VarAddress}");
       machine.MountedFiles[id] = name;
       machine.Write_U16(VarAddress - 2, file.Size);
       machine.Write_U16(VarAddress, file.Address);

@@ -199,6 +199,50 @@ namespace Axe4Unity {
     }
 
     [Test]
+    public void TestCanUseIfWithNoExpression() {
+      Execute("1->A",
+              "If ",
+              "2->B",
+              "End",
+              "0->A",
+              "If ",
+              "3->C",
+              "End");
+
+      Assert.That(U16("B"), Is.EqualTo(2));
+      Assert.That(U16("C"), Is.EqualTo(0));
+    }
+
+    [Test]
+    public void TestCanUseReturnIfWithNoExpression() {
+      Execute("FOO()",
+              "Return",
+              "Lbl FOO",
+              "0->A",
+              "ReturnIf ",
+              "1->B",
+              "Return!If ",
+              "5->F",
+              "0->C",
+              "Return!If ",
+              "6->F",
+              "Return");
+
+      Assert.That(U16("F"), Is.EqualTo(5));
+    }
+
+    [Test]
+    public void TestArgCanBeBasedOnPreviousArg() {
+      Execute("sub(FOO,~3,+2)",
+              "Return",
+              "Lbl FOO",
+              "{r2}->A",
+              "Return");
+
+      Assert.That(S16("A"), Is.EqualTo(-1));
+    }
+
+    [Test]
     public void TestBigChonker() {
       Execute("AO(5,3,9)",
               "Return",
