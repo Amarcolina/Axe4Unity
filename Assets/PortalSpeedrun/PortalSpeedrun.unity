@@ -631,7 +631,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0c51388a8c937e4b8b2b42212ae0cd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AxeSpeedRunExporter
-  OutputPath: Assets/AxePrograms/PortalPreludeSR/SPEEDRUN.8Xv
+  OutputPath: Assets/PortalSpeedrun/SPEEDRUN.8Xv
   States:
   - {fileID: 11400000, guid: f616c983087961f488acc327c505fb79, type: 2}
   - {fileID: 11400000, guid: 150dea5567775e846acea38696fe0569, type: 2}
@@ -680,7 +680,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 36ee0bc2476f4a144b66a13b33d656d1, type: 2}
   - {fileID: 11400000, guid: 0383ed1fe61262142b809f715238611f, type: 2}
   - {fileID: 11400000, guid: 98c9ebbdd1e676a4eac39652152d5e56, type: 2}
-  - {fileID: 11400000, guid: f9ec45b49b4aecc41b3c3cd47064eb2e, type: 2}
+  - {fileID: 11400000, guid: f5d23a305fca3e84b8ce676541a11826, type: 2}
   - {fileID: 11400000, guid: cb6c1dc34340fa64e836e9dfe4492da5, type: 2}
   - {fileID: 11400000, guid: f50a801d4f092c349aa6037caa026f55, type: 2}
   - {fileID: 11400000, guid: 218b8171e80b55d4ea3ae5c886f4dedd, type: 2}
@@ -1132,15 +1132,15 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1309531943}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d4980a94e17174b4a8e3fa19fe4cf437, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Axe4Unity::Axe4Unity.AxeSpeedRunController
   Runner: {fileID: 1309531941}
   Controls: {fileID: 1309531942}
-  Recording: {fileID: 11400000, guid: f5d23a305fca3e84b8ce676541a11826, type: 2}
-  StartingState: {fileID: 11400000, guid: 65c13ada7123c2f4f8083b315d6a9069, type: 2}
+  Recording: {fileID: 11400000, guid: eb8500b1c276ac24081b5e4fd14bb82e, type: 2}
+  StartingState: {fileID: 11400000, guid: 62a0ef099537014409e388af9beb658a, type: 2}
   Record: 0
   PlaybackFPS: 60
   Restart: 1
