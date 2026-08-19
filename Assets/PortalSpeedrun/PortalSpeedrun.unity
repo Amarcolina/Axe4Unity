@@ -675,7 +675,7 @@ MonoBehaviour:
   Recordings:
   - {fileID: 11400000, guid: 09422183f63532f44b60ef2d7768d3c1, type: 2}
   - {fileID: 11400000, guid: 4d19e07f7843371439ffafeb1b668e2e, type: 2}
-  - {fileID: 11400000, guid: 01288ba607cf2f841be0831696b19d76, type: 2}
+  - {fileID: 11400000, guid: 263992bad69df57448632ebc45eea725, type: 2}
   - {fileID: 11400000, guid: b3a0678a91fd7c74ab2e32169428857e, type: 2}
   - {fileID: 11400000, guid: 36ee0bc2476f4a144b66a13b33d656d1, type: 2}
   - {fileID: 11400000, guid: 0383ed1fe61262142b809f715238611f, type: 2}
@@ -1132,7 +1132,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1309531943}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d4980a94e17174b4a8e3fa19fe4cf437, type: 3}
   m_Name: 
@@ -1498,7 +1498,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &2049983528
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1512,9 +1512,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Axe4Unity::Axe4Unity.AxeSpeedRunOptimizer
   Runner: {fileID: 1309531941}
-  StartingState: {fileID: 11400000, guid: 9d6e898c502488a49992f135e9d9347b, type: 2}
-  InputRecording: {fileID: 11400000, guid: 57f2cdac52869b44987daf024f4f9419, type: 2}
-  OutputRecording: {fileID: 11400000, guid: f5d23a305fca3e84b8ce676541a11826, type: 2}
+  StartingState: {fileID: 11400000, guid: 958ecfd87eeba8a46949521c83c3d399, type: 2}
+  InputRecording: {fileID: 11400000, guid: 36ee0bc2476f4a144b66a13b33d656d1, type: 2}
+  OutputRecording: {fileID: 11400000, guid: 68aeee3fa3f026d4c84a216cb906c323, type: 2}
   ExtraRightFrames: 16
   WinLine: 367
   WinLine2: 338
