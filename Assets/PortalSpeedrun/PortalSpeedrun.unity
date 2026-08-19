@@ -681,11 +681,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a5483094fc1cb524b860476889182923, type: 2}
   - {fileID: 11400000, guid: 98c9ebbdd1e676a4eac39652152d5e56, type: 2}
   - {fileID: 11400000, guid: f5d23a305fca3e84b8ce676541a11826, type: 2}
-  - {fileID: 11400000, guid: cb6c1dc34340fa64e836e9dfe4492da5, type: 2}
+  - {fileID: 11400000, guid: f79163e1c21d0564a90aea9b68fda15e, type: 2}
   - {fileID: 11400000, guid: c438b8533812b274aabc41964745ec28, type: 2}
   - {fileID: 11400000, guid: 218b8171e80b55d4ea3ae5c886f4dedd, type: 2}
   - {fileID: 11400000, guid: 2fa6ea02a1ab7314d96bc78d957fd047, type: 2}
-  - {fileID: 11400000, guid: 1fcb7cb6d9140fa478a080fc253a372a, type: 2}
+  - {fileID: 11400000, guid: 0056961578fe33b4b907f63067a5ca22, type: 2}
   - {fileID: 11400000, guid: d84737a3e3775cc47bfddf96b3d24e99, type: 2}
   - {fileID: 11400000, guid: 676cc7d4610a34e48b1e1c5d87262e47, type: 2}
   - {fileID: 11400000, guid: 57c1f903cdebf2246b1bbe60151ef9f0, type: 2}
@@ -1512,9 +1512,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Axe4Unity::Axe4Unity.AxeSpeedRunOptimizer
   Runner: {fileID: 1309531941}
-  StartingState: {fileID: 11400000, guid: c68cd2f08e869d749bf6b2a8600d7bb7, type: 2}
-  InputRecording: {fileID: 11400000, guid: cb6c1dc34340fa64e836e9dfe4492da5, type: 2}
-  OutputRecording: {fileID: 11400000, guid: f79163e1c21d0564a90aea9b68fda15e, type: 2}
+  StartingState: {fileID: 11400000, guid: f01649eb6e1c1f148ac8bb69887220fb, type: 2}
+  InputRecording: {fileID: 11400000, guid: 1fcb7cb6d9140fa478a080fc253a372a, type: 2}
+  OutputRecording: {fileID: 11400000, guid: 0056961578fe33b4b907f63067a5ca22, type: 2}
   ExtraRightFrames: 16
   WinLine: 367
   WinLine2: 338
