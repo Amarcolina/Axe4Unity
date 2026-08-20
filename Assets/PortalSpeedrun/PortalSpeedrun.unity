@@ -1512,9 +1512,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Axe4Unity::Axe4Unity.AxeSpeedRunOptimizer
   Runner: {fileID: 1309531941}
-  StartingState: {fileID: 11400000, guid: dd0963e4e008daa408e10eb52a34d519, type: 2}
-  InputRecording: {fileID: 11400000, guid: f2988117be9848c4289349475ccba278, type: 2}
-  OutputRecording: {fileID: 11400000, guid: b21585575665ad742b85e17a6ab07075, type: 2}
+  StartingState: {fileID: 11400000, guid: 7557892580603e741976a62204166e00, type: 2}
+  InputRecording: {fileID: 11400000, guid: b19b97d6c1fd20447b335a6619baa527, type: 2}
+  OutputRecording: {fileID: 11400000, guid: c0062b0cd7212a9439aa2fee57369f93, type: 2}
   ExtraRightFrames: 16
   WinLine: 367
   WinLine2: 338
