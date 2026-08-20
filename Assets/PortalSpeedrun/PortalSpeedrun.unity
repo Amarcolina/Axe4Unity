@@ -691,7 +691,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 57c1f903cdebf2246b1bbe60151ef9f0, type: 2}
   - {fileID: 11400000, guid: 8e986d38a396fd44d86dec9e7cf6e909, type: 2}
   - {fileID: 11400000, guid: 10ffe2fa20e197347bfbf0712f7d5ce7, type: 2}
-  - {fileID: 11400000, guid: 416ceee79832eb342b85ecfc7fb99c5b, type: 2}
+  - {fileID: 11400000, guid: aedbeb033aebe394e866af92af579e59, type: 2}
   - {fileID: 11400000, guid: 1165323c49107f04ab98bb7727d9fb4d, type: 2}
   - {fileID: 11400000, guid: 6f4554f01a2cf0e41ba5008e7e314baf, type: 2}
   - {fileID: 11400000, guid: 2606b6b30bbf8654ebff5ac1bf38d5ef, type: 2}
@@ -1139,8 +1139,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Axe4Unity::Axe4Unity.AxeSpeedRunController
   Runner: {fileID: 1309531941}
   Controls: {fileID: 1309531942}
-  Recording: {fileID: 11400000, guid: db5c9092d958434489c654c80c239814, type: 2}
-  StartingState: {fileID: 11400000, guid: 9d6e898c502488a49992f135e9d9347b, type: 2}
+  Recording: {fileID: 11400000, guid: c28f660c607c27e49aaaae30b360ca4f, type: 2}
+  StartingState: {fileID: 11400000, guid: c9c7367cbd666f04cb15198479259fcd, type: 2}
   Record: 0
   PlaybackFPS: 60
   Restart: 1
@@ -1498,7 +1498,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &2049983528
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1512,9 +1512,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Axe4Unity::Axe4Unity.AxeSpeedRunOptimizer
   Runner: {fileID: 1309531941}
-  StartingState: {fileID: 11400000, guid: db64674b9b6cc7242a748193e39aea3b, type: 2}
-  InputRecording: {fileID: 11400000, guid: 416ceee79832eb342b85ecfc7fb99c5b, type: 2}
-  OutputRecording: {fileID: 11400000, guid: aedbeb033aebe394e866af92af579e59, type: 2}
+  StartingState: {fileID: 11400000, guid: c9c7367cbd666f04cb15198479259fcd, type: 2}
+  InputRecording: {fileID: 11400000, guid: af2297c15410c6045be50ee2fa42d588, type: 2}
+  OutputRecording: {fileID: 11400000, guid: 20468df2e37cbc942bf5e8648d69d382, type: 2}
   ExtraRightFrames: 16
   WinLine: 367
   WinLine2: 338
@@ -1522,8 +1522,8 @@ MonoBehaviour:
   ContinueLine: 460
   MaxFrameMS: 60
   SimulationCount: 100000
-  MaxFrameLoss: 10
-  ResetLossThreshold: 10
+  MaxFrameLoss: 1
+  ResetLossThreshold: 1
   SchedulePower: 3
   MaxMutationCount: 6
   Progress: 0
